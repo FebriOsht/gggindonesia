@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+🌿 PT Gatha Gemilang Global (GGG)
 
-First, run the development server:
+Connecting Global Markets with Indonesia's Finest Commodities
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<p align="center">
+<b>PT Gatha Gemilang Global (GGG)</b> adalah perusahaan perdagangan ekspor terkemuka yang berbasis di Medan, Sumatera Utara. Kami hadir sebagai jembatan strategis yang menghubungkan pasar global dengan kekayaan alam terbaik dari seluruh kepulauan Indonesia, didukung oleh pengalaman mendalam di sektor perbankan dan bisnis.
+</p>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🌐 Visit Official Website | 📩 Inquiry Email | 📱 WhatsApp Business
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+</div>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+👁️ Visi & Misi
 
-## Learn More
+"Menjadi merek utama yang diingat oleh pembeli internasional saat mencari komoditas Indonesia yang dapat diandalkan dan berkualitas tinggi."
 
-To learn more about Next.js, take a look at the following resources:
+Misi: Memfasilitasi ekspor hasil bumi Indonesia berkualitas tinggi melalui kemitraan yang transparan, efektif, dan profesional.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+📦 Katalog Produk Unggulan
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<details open>
+<summary><b>☕ Premium Indonesian Coffee</b></summary>
 
-## Deploy on Vercel
+Indonesian Arabica: Gayo, Mandheling, Java, & Lintong.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Indonesian Robusta: Lampung, Sidikalang, & Temanggung.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Processing: Full Washed / Semi-Washed (Grade 1-3 available).
+
+</details>
+
+<details>
+<summary><b>🍯 Natural Sweeteners</b></summary>
+
+Pure Sugarcane Molasses: 100% Natural, Brix 80.6%.
+
+Premium Palm Sugar: Low Glycemic Index, Caramel Notes, Crystal/Block form.
+
+</details>
+
+<details>
+<summary><b>🥥 Coconut & Derivatives</b></summary>
+
+Copra: Kualitas tinggi untuk pasar industri.
+
+Whole Coconut: Diproses dengan standar higienis tinggi.
+
+</details>
+
+<details>
+<summary><b>🍃 Betel Nut & Fresh Vegetables</b></summary>
+
+Betel Nut (Pinang): Whole & Split, Moisture <5%.
+
+Fresh Vegetables: Kentang, Ubi Jalar, Kubis, Wortel (Vulkanik-Sumatera).
+
+</details>
+
+✨ Mengapa Memilih GGG?
+
+Fitur
+
+Deskripsi
+
+🌍 Kehadiran Lokal
+
+Inspeksi langsung ke ladang & pabrik untuk kontrol kualitas maksimal.
+
+🔗 Supply Chain
+
+Manajemen end-to-end dari desa terpencil hingga pelabuhan tujuan.
+
+🛡️ Legalitas
+
+Beroperasi resmi dengan NIB, NPWP, dan SK Kemenkumham yang sah.
+
+🤝 Profesionalisme
+
+Didukung oleh tim ahli dengan latar belakang perbankan dan finansial.
+
+⚖️ Legalitas Perusahaan
+
+NIB: 0611250135091
+
+NPWP: 10.000.000.0641.8583
+
+SK Kemenkumham: AHU-061665.AH.01.30.Tahun 2025
+
+📞 Hubungi Kami
+
+Jika Anda mencari mitra pengadaan komoditas yang handal di Indonesia, kami siap berkolaborasi.
+
+📍 Alamat: Jalan Amplas 14a/31, Medan - Sumatera Utara, Indonesia 20212
+
+💬 WhatsApp: +62 812 6451 588
+
+📧 Email: Hendra.GGG.ID@gmail.com
+
+🔗 LinkedIn: linkedin.com/in/gathagemilangglobal
+
+📸 Instagram: @gathagemilangglobal
+
+<div align="center">
+
+© 2026 PT Gatha Gemilang Global. All Rights Reserved.
+
+</div>

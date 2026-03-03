@@ -1,0 +1,17 @@
+import { defineConfig } from '@prisma/config';
+import 'dotenv/config';
+
+export default defineConfig({
+  // Menunjuk ke file schema Prisma yang ada di Canvas
+  schema: 'prisma/schema.prisma',
+  
+  migrations: {
+    // Konfigurasi seed database
+    seed: 'ts-node prisma/seed.ts'
+  },
+  
+  datasource: {
+    // Mengambil URL dari .env, dengan fallback langsung ke file SQLite lokal jika .env gagal terbaca
+    url: process.env.DATABASE_URL || 'file:./dev.db',
+  },
+});

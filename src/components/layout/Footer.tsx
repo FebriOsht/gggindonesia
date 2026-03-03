@@ -1,83 +1,153 @@
-import React from 'react';
-import Link from 'next/link';
-import { Mail, Phone, MapPin, Linkedin, Instagram, Facebook } from 'lucide-react';
-import { Container } from '../ui/Container';
+'use client';
 
-const Footer = () => {
+import Link from 'next/link';
+import { 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Linkedin, 
+  Instagram, 
+  Globe, 
+  ArrowRight,
+  ShieldCheck
+} from 'lucide-react';
+
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-dark text-white pt-16 pb-8">
-      <Container>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          <div>
-            <h3 className="text-2xl font-display font-bold mb-4">GGG Indonesia</h3>
-            <p className="text-gray-300 mb-4">
-              Perusahaan ekspor terkemuka yang menghubungkan pasar global dengan produk-produk terbaik dari Indonesia.
+    <footer className="bg-gray-950 text-gray-400 pt-20 pb-10 border-t border-emerald-900/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          
+          {/* Kolom 1: Profil Perusahaan */}
+          <div className="space-y-6">
+            <Link href="/" className="inline-block">
+              <img src="/img/gggindonesia.png" alt="GGG Logo" className="h-14 w-auto brightness-125" />
+            </Link>
+            <p className="text-sm leading-relaxed text-gray-500">
+              A premier export trading company from Indonesia, connecting global markets with the finest products from across the archipelago. We are your dependable and effective sourcing partner.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-secondary transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-secondary transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-secondary transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
+            <div className="space-y-3">
+              <div className="flex items-center text-[10px] uppercase tracking-tighter text-gray-600 bg-white/5 p-2 rounded-lg border border-white/5">
+                <ShieldCheck className="w-3 h-3 mr-2 text-emerald-500" />
+                <span>NIB: 0611250135091</span>
+              </div>
+              <div className="flex items-center text-[10px] uppercase tracking-tighter text-gray-600 bg-white/5 p-2 rounded-lg border border-white/5">
+                <ShieldCheck className="w-3 h-3 mr-2 text-emerald-500" />
+                <span>SK: AHU-061665.AH.01.30.Tahun 2025</span>
+              </div>
             </div>
           </div>
 
+          {/* Kolom 2: Produk Unggulan */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Tautan Cepat</h4>
-            <ul className="space-y-2">
-              <li><Link href="/" className="text-gray-300 hover:text-secondary transition-colors">Beranda</Link></li>
-              <li><Link href="#products" className="text-gray-300 hover:text-secondary transition-colors">Produk</Link></li>
-              <li><Link href="#about" className="text-gray-300 hover:text-secondary transition-colors">Tentang Kami</Link></li>
-              <li><Link href="/blog" className="text-gray-300 hover:text-secondary transition-colors">Blog</Link></li>
+            <h4 className="text-white font-bold mb-8 flex items-center">
+              Our Commodities
+              <span className="ml-2 w-8 h-px bg-emerald-600"></span>
+            </h4>
+            <ul className="space-y-4 text-sm font-medium">
+              <li>
+                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
+                  Indonesian Arabica & Robusta
+                </Link>
+              </li>
+              <li>
+                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
+                  Natural Sugarcane Molasses
+                </Link>
+              </li>
+              <li>
+                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
+                  Premium Palm Sugar
+                </Link>
+              </li>
+              <li>
+                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
+                  Coconut & Derivatives
+                </Link>
+              </li>
+              <li>
+                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
+                  Betel Nut & Vegetables
+                </Link>
+              </li>
             </ul>
           </div>
 
+          {/* Kolom 3: Navigasi Cepat */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Produk</h4>
-            <ul className="space-y-2">
-              <li><Link href="#coffee" className="text-gray-300 hover:text-secondary transition-colors">Kopi Premium</Link></li>
-              <li><Link href="#sweeteners" className="text-gray-300 hover:text-secondary transition-colors">Pemanis Alami</Link></li>
-              <li><Link href="#coconut" className="text-gray-300 hover:text-secondary transition-colors">Produk Kelapa</Link></li>
-              <li><Link href="#others" className="text-gray-300 hover:text-secondary transition-colors">Pinang & Sayuran</Link></li>
+            <h4 className="text-white font-bold mb-8 flex items-center">
+              Quick Links
+              <span className="ml-2 w-8 h-px bg-emerald-600"></span>
+            </h4>
+            <ul className="space-y-4 text-sm font-medium">
+              <li><Link href="/" className="hover:text-emerald-400 transition-colors">Home</Link></li>
+              <li><Link href="/#about" className="hover:text-emerald-400 transition-colors">About Us</Link></li>
+              <li><Link href="/#why-us" className="hover:text-emerald-400 transition-colors">Values & Mission</Link></li>
+              <li><Link href="/blog" className="hover:text-emerald-400 transition-colors">Insights & News</Link></li>
+              <li><Link href="/#contact" className="hover:text-emerald-400 transition-colors text-emerald-500 font-bold">Contact Now</Link></li>
             </ul>
           </div>
 
+          {/* Kolom 4: Hubungi Kami */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Kontak</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
-                <span className="text-gray-300">Jalan Amplas 14a/31 Medan - Sumatera Utara, Indonesia</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-secondary flex-shrink-0" />
-                <span className="text-gray-300">+62 812 6451 588</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-secondary flex-shrink-0" />
-                <a href="mailto:Hendra.GGG.ID@gmail.com" className="text-gray-300 hover:text-secondary transition-colors">
-                  Hendra.GGG.ID@gmail.com
+            <h4 className="text-white font-bold mb-8 flex items-center">
+              Office Location
+              <span className="ml-2 w-8 h-px bg-emerald-600"></span>
+            </h4>
+            <div className="space-y-6 text-sm">
+              <div className="flex items-start">
+                <MapPin className="w-5 h-5 mr-4 text-emerald-500 flex-shrink-0" />
+                <p className="leading-relaxed">
+                  Jalan Amplas 14a/31,<br />
+                  Medan - North Sumatra,<br />
+                  Indonesia 20212
+                </p>
+              </div>
+              <div className="flex items-center">
+                <Phone className="w-5 h-5 mr-4 text-emerald-500 flex-shrink-0" />
+                <a href="https://wa.me/628126451588" className="hover:text-white transition-colors">+62 812 6451 588</a>
+              </div>
+              <div className="flex items-center">
+                <Mail className="w-5 h-5 mr-4 text-emerald-500 flex-shrink-0" />
+                <a href="mailto:Hendra.GGG.ID@gmail.com" className="hover:text-white transition-colors">Hendra.GGG.ID@gmail.com</a>
+              </div>
+              
+              {/* Social Media */}
+              <div className="flex items-center space-x-4 pt-4">
+                <a href="https://linkedin.com/in/gathagemilangglobal" target="_blank" className="p-2 bg-white/5 hover:bg-emerald-600 hover:text-white rounded-lg transition-all">
+                  <Linkedin className="w-5 h-5" />
                 </a>
-              </li>
-            </ul>
+                <a href="#" className="p-2 bg-white/5 hover:bg-emerald-600 hover:text-white rounded-lg transition-all">
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <div className="flex items-center px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase text-gray-500">
+                  <Globe className="w-3 h-3 mr-1" /> ID / EN
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
 
-        <div className="border-t border-gray-700 pt-8 text-center">
-          <p className="text-gray-400">
-            © {new Date().getFullYear()} PT Gatha Gemilang Global. Hak Cipta Dilindungi.
-          </p>
-          <p className="text-gray-500 text-sm mt-2">
-            NIB: 0611250135091 | NPWP: 1000 0000 0641 8583 | SK Kemenkumham: AHU-061665.AH.01.30.Tahun 2025
-          </p>
+        {/* Garis Bawah & Hak Cipta */}
+        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-xs font-medium text-gray-600 flex items-center">
+            <span>© {currentYear} PT Gatha Gemilang Global. All Rights Reserved.</span>
+          </div>
+          <div className="flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest text-gray-700">
+            <span className="bg-emerald-950/50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-900/30">
+              NPWP: 1000 0000 0641 8583
+            </span>
+          </div>
         </div>
-      </Container>
+      </div>
     </footer>
   );
-};
-
-export default Footer;
+}

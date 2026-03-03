@@ -1,44 +1,28 @@
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient()
-
-const hashPassword = async (password: string): Promise<string> => {
-  const salt = await bcrypt.genSalt(10)
-  return await bcrypt.hash(password, salt)
-}
+const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting seeding...')
-  
-  const adminEmail = 'admin@gggindonesia.com'
-  const existingAdmin = await prisma.user.findUnique({
-    where: { email: adminEmail }
-  })
+  console.log("Seeding...");
 
-  if (!existingAdmin) {
-    const hashedPassword = await hashPassword('admin123')
-    const admin = await prisma.user.create({
-      data: {
-        email: adminEmail,
-        password: hashedPassword,
-        name: 'Admin GGG',
-        role: 'ADMIN'
-      }
-    })
-    console.log('✅ Admin user created:', admin.email)
-  } else {
-    console.log('ℹ️ Admin already exists')
-  }
-  
-  console.log('🎉 Seeding completed!')
+  const adminPassword = "admin123";
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+
+  await prisma.user.upsert({
+    where: { email: "admin@gggindonesia.com" },
+    update: { password: hashedPassword },
+    create: {
+      email: "admin@gggindonesia.com",
+      name: "Admin Utama GGG",
+      password: hashedPassword,
+      role: "ADMIN",
+    },
+  });
+
+  console.log("Admin ready.");
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Seeding failed:', e)
-    process.exit(1)
-  })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

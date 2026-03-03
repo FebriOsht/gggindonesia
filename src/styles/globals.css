@@ -1,17 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Base styles yang sebelumnya mungkin memanggil @apply font-sans atau serupa */
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-  
   body {
-    @apply bg-[#F8F9FA] text-[#2C3E50] font-sans;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold;
+    font-family: var(--font-sans);
   }
 }

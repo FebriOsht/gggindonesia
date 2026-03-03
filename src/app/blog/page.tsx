@@ -1,183 +1,196 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Calendar, User, ChevronRight } from 'lucide-react';
-import Layout from '@/components/layout/Layout';
-import { Container } from '@/components/ui/Container';
-import { Card } from '@/components/ui/Card';
+import prisma from '@/lib/prisma';
+import { Calendar, ArrowRight, Search, Inbox } from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
-// This would typically come from an API/database
-const blogPosts = [
-  {
-    id: 1,
-    title: 'Keistimewaan Kopi Arabika Gayo dari Aceh',
-    excerpt: 'Menjelajahi karakteristik unik kopi Arabika Gayo yang terkenal dengan body kuat dan rasa earthy dengan sentuhan cokelat. Kopi ini telah menjadi favorit para pecinta kopi di seluruh dunia.',
-    content: '',
-    author: 'Tim GGG',
-    date: '2024-01-15',
-    image: '/images/blog/gayo-coffee.jpg',
-    category: 'Kopi',
-    readTime: 5
-  },
-  {
-    id: 2,
-    title: 'Proses Produksi Gula Aren Premium',
-    excerpt: 'Mengenal proses tradisional pembuatan gula aren berkualitas ekspor dari nira pohon aren pilihan. Dari pengumpulan nira hingga pengemasan akhir.',
-    content: '',
-    author: 'Tim GGG',
-    date: '2024-01-10',
-    image: '/images/blog/palm-sugar.jpg',
-    category: 'Pemanis Alami',
-    readTime: 4
-  },
-  {
-    id: 3,
-    title: 'Manfaat Molases Tebu untuk Industri',
-    excerpt: 'Berbagai kegunaan molases tebu dalam industri pangan, pakan ternak, dan pertanian organik. Produk ini kaya akan mineral dan nutrisi.',
-    content: '',
-    author: 'Tim GGG',
-    date: '2024-01-05',
-    image: '/images/blog/molasses.jpg',
-    category: 'Produk Tebu',
-    readTime: 6
-  },
-  {
-    id: 4,
-    title: 'Potensi Ekspor Kelapa Indonesia',
-    excerpt: 'Indonesia sebagai penghasil kelapa terbesar di dunia memiliki potensi ekspor yang luar biasa. Berbagai produk turunan kelapa sangat diminati pasar global.',
-    content: '',
-    author: 'Tim GGG',
-    date: '2024-01-01',
-    image: '/images/blog/coconut.jpg',
-    category: 'Kelapa',
-    readTime: 7
-  },
-  {
-    id: 5,
-    title: 'Standar Kualitas Ekspor Pinang',
-    excerpt: 'Memahami standar kualitas dan grade pinang untuk pasar internasional. Mulai dari kadar air hingga pola internal yang menentukan harga.',
-    content: '',
-    author: 'Tim GGG',
-    date: '2023-12-28',
-    image: '/images/blog/betel-nut.jpg',
-    category: 'Pinang',
-    readTime: 5
-  },
-  {
-    id: 6,
-    title: 'Tips Memilih Sayuran Segar Berkualitas Ekspor',
-    excerpt: 'Panduan memilih sayuran segar yang memenuhi standar ekspor. Dari kesegaran, ukuran, hingga kemasan yang tepat.',
-    content: '',
-    author: 'Tim GGG',
-    date: '2023-12-20',
-    image: '/images/blog/vegetables.jpg',
-    category: 'Sayuran',
-    readTime: 4
-  }
-];
+export default async function BlogPage() {
+  // Mengambil data artikel asli dari database Prisma
+  const posts = await prisma.blogPost.findMany({
+    where: { 
+      published: true 
+    },
+    orderBy: { 
+      createdAt: 'desc' 
+    },
+    include: { 
+      author: true 
+    }
+  });
 
-const categories = ['Semua', 'Kopi', 'Pemanis Alami', 'Kelapa', 'Pinang', 'Sayuran'];
+  // Menghitung jumlah kategori secara dinamis dari data yang ada
+  const categories = posts.reduce((acc: {[key: string]: number}, post) => {
+    acc[post.category] = (acc[post.category] || 0) + 1;
+    return acc;
+  }, {});
 
-export default function BlogPage() {
-  const [selectedCategory, setSelectedCategory] = React.useState('Semua');
-
-  const filteredPosts = selectedCategory === 'Semua' 
-    ? blogPosts 
-    : blogPosts.filter(post => post.category === selectedCategory);
+  const categoryList = Object.entries(categories).map(([name, count]) => ({
+    name,
+    count
+  }));
 
   return (
-    <Layout>
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-gradient-to-r from-primary to-dark text-white">
-        <Container>
-          <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
-            Blog & Artikel
-          </h1>
-          <p className="text-xl max-w-3xl text-gray-200">
-            Dapatkan wawasan dan informasi terbaru seputar produk ekspor Indonesia, 
-            industri perdagangan internasional, dan perkembangan terbaru dari GGG.
-          </p>
-        </Container>
-      </section>
+    <>
+      {/* Navbar Fixed */}
+      <Header />
 
-      {/* Blog Posts */}
-      <section className="py-20 bg-light">
-        <Container>
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-4 justify-center mb-12">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-primary text-white shadow-lg transform scale-105'
-                    : 'bg-white text-dark hover:bg-primary/10'
-                }`}
-              >
-                {category}
+      <main className="min-h-screen bg-gray-50 pb-20">
+        
+        {/* Blog Page Hero Section - Menggunakan gggblog.png dengan visibilitas yang ditingkatkan */}
+        <div className="relative bg-emerald-950 text-white pt-24 md:pt-32 pb-20 md:pb-28 mb-16 overflow-hidden shadow-xl">
+          {/* Background Image Overlay - Diperbarui ke gggblog.png dan opacity dinaikkan sedikit agar lebih jelas */}
+          <div 
+            className="absolute inset-0 bg-[url('/img/gggblog.png')] bg-cover bg-center opacity-40 scale-105"
+          ></div>
+          
+          {/* Gradient Overlay yang disesuaikan agar gambar di belakang lebih terlihat */}
+          <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/80 via-emerald-950/50 to-emerald-900/80"></div>
+          
+          {/* Ornamen Cahaya Samping */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/20 blur-[120px] rounded-full"></div>
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <span className="text-emerald-400 font-bold tracking-widest uppercase text-xs md:text-sm mb-3 block drop-shadow-sm">
+              PT Gatha Gemilang Global
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-md text-white">
+              Our Blog & Insights
+            </h1>
+            <p className="text-base md:text-xl text-emerald-50 max-w-2xl mx-auto mb-10 font-normal leading-relaxed px-4 drop-shadow-sm">
+              Explore the latest news, market trends, and deep dives into Indonesia's finest agricultural commodities.
+            </p>
+            
+            {/* Search Bar yang lebih ramping */}
+            <div className="max-w-xl mx-auto relative group px-4">
+              <input 
+                type="text" 
+                placeholder="Search articles or news..." 
+                className="w-full px-6 py-4 rounded-full text-gray-900 bg-white shadow-2xl outline-none focus:ring-4 focus:ring-emerald-500/30 transition-all duration-300 placeholder-gray-400"
+              />
+              <button className="absolute right-6 top-2 bottom-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 rounded-full transition-all flex items-center font-bold shadow-md hover:scale-105 active:scale-95">
+                <Search className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:block">Search</span>
               </button>
-            ))}
-          </div>
-
-          {/* Posts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPosts.map((post) => (
-              <Card key={post.id} className="group">
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-full text-sm">
-                    {post.category}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center space-x-4 text-sm text-dark/60 mb-3">
-                    <span className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {new Date(post.date).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                      })}
-                    </span>
-                    <span className="flex items-center">
-                      <User className="w-4 h-4 mr-1" />
-                      {post.author}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-semibold text-primary mb-3 group-hover:text-secondary transition-colors">
-                    <Link href={`/blog/${post.id}`}>
-                      {post.title}
-                    </Link>
-                  </h2>
-                  <p className="text-dark/70 mb-4 line-clamp-3">{post.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-dark/60">{post.readTime} menit baca</span>
-                    <Link 
-                      href={`/blog/${post.id}`}
-                      className="text-secondary font-semibold flex items-center hover:underline"
-                    >
-                      Baca Selengkapnya
-                      <ChevronRight className="w-4 h-4 ml-1" />
-                    </Link>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-
-          {filteredPosts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-xl text-dark/60">Tidak ada artikel dalam kategori ini.</p>
             </div>
-          )}
-        </Container>
-      </section>
-    </Layout>
+          </div>
+        </div>
+
+        {/* Blog Content Layout */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
+          
+          {/* Main Article Grid */}
+          <div className="lg:w-2/3">
+            {posts.length === 0 ? (
+              <div className="bg-white rounded-3xl p-20 text-center border border-dashed border-gray-300 shadow-sm">
+                <Inbox className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <h3 className="text-xl font-bold text-gray-900">Belum ada artikel</h3>
+                <p className="text-gray-500 mt-2">Silakan tambahkan artikel baru melalui dashboard admin.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {posts.map((post) => (
+                  <div key={post.id} className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 group flex flex-col transform hover:-translate-y-2">
+                    
+                    {/* Image Container */}
+                    <div className="relative h-64 overflow-hidden bg-gray-100">
+                      <div className="absolute top-4 left-4 z-10 bg-emerald-600 px-4 py-1.5 rounded-full text-[10px] font-bold text-white shadow-lg tracking-wider uppercase">
+                        {post.category}
+                      </div>
+                      {post.image ? (
+                        <img 
+                          src={post.image} 
+                          alt={post.title} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" 
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-300">
+                          <Inbox className="w-12 h-12" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Content Container */}
+                    <div className="p-8 flex flex-col flex-grow">
+                      <div className="flex items-center text-sm text-gray-400 mb-4 font-semibold uppercase tracking-widest">
+                        <Calendar className="w-4 h-4 mr-2 text-emerald-600" />
+                        {new Date(post.createdAt).toLocaleDateString('id-ID', { 
+                          day: 'numeric', 
+                          month: 'short', 
+                          year: 'numeric' 
+                        })}
+                      </div>
+                      
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-emerald-600 transition-colors leading-tight line-clamp-2">
+                        <Link href={`/blog/${post.slug}`}>
+                          {post.title}
+                        </Link>
+                      </h3>
+                      
+                      <p className="text-gray-500 text-base leading-relaxed mb-8 line-clamp-3 flex-grow font-light">
+                        {post.excerpt || 'Explore deeper insights about this commodity in our latest update.'}
+                      </p>
+                      
+                      <Link 
+                        href={`/blog/${post.slug}`} 
+                        className="inline-flex items-center text-sm font-bold text-emerald-600 hover:text-emerald-800 mt-auto group/link"
+                      >
+                        Read Full Article 
+                        <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover/link:translate-x-2" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:w-1/3 space-y-8">
+            
+            {/* Categories Widget */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm sticky top-32">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4 font-sans tracking-tight">Categories</h3>
+              <ul className="space-y-3">
+                {categoryList.length === 0 ? (
+                  <li className="text-sm text-gray-400 italic">No categories found</li>
+                ) : (
+                  categoryList.map((cat) => (
+                    <li key={cat.name}>
+                      <button className="w-full flex justify-between items-center p-3.5 rounded-xl hover:bg-emerald-50 group transition-all text-left border border-transparent hover:border-emerald-100">
+                        <span className="text-gray-700 font-semibold group-hover:text-emerald-700">{cat.name}</span>
+                        <span className="bg-gray-100 text-gray-500 group-hover:bg-emerald-600 group-hover:text-white py-1 px-3 rounded-lg text-xs font-bold transition-all">
+                          {cat.count}
+                        </span>
+                      </button>
+                    </li>
+                  ))
+                )}
+              </ul>
+            </div>
+
+            {/* Contact Banner Widget */}
+            <div className="bg-emerald-600 rounded-3xl p-8 text-white text-center shadow-xl relative overflow-hidden group">
+              {/* Overlay Pattern */}
+              <div className="absolute inset-0 bg-emerald-700 opacity-50 group-hover:scale-110 transition-transform duration-700" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+              
+              <div className="relative z-10">
+                <h3 className="text-3xl font-extrabold mb-4 leading-tight">Looking for Premium Commodities?</h3>
+                <p className="text-emerald-100 mb-8 text-base leading-relaxed font-light">
+                  Get in touch with us to discuss your export needs, specifications, and request product samples.
+                </p>
+                <Link href="/#contact" className="block w-full py-4 bg-white text-emerald-800 font-extrabold rounded-2xl hover:bg-emerald-50 transition-all shadow-lg hover:shadow-2xl hover:-translate-y-1 transform duration-300">
+                  Contact Us Now
+                </Link>
+              </div>
+            </div>
+            
+          </div>
+
+        </div>
+      </main>
+
+      <Footer />
+    </>
   );
 }

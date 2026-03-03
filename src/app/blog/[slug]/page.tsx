@@ -1,161 +1,124 @@
-'use client';
-
 import React from 'react';
+// Menggunakan jalur relatif untuk menghindari masalah resolusi alias path (@/)
+import prisma from '../../../lib/prisma';
+import { notFound } from 'next/navigation';
+import { Calendar, User, ArrowLeft, Clock } from 'lucide-react';
+import Header from '../../../components/layout/Header';
+import Footer from '../../../components/layout/Footer';
 import Link from 'next/link';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import { Calendar, User, ArrowLeft, Clock, Share2 } from 'lucide-react';
-import Layout from '@/components/layout/Layout';
-import { Container } from '@/components/ui/Container';
-import { Button } from '@/components/ui/Button';
 
-// This would typically come from an API/database
-const blogPosts = {
-  '1': {
-    id: 1,
-    title: 'Keistimewaan Kopi Arabika Gayo dari Aceh',
-    content: `
-      <p>Kopi Arabika Gayo merupakan salah satu kopi terbaik yang berasal dari dataran tinggi Gayo, Aceh. Kopi ini telah dikenal di seluruh dunia karena karakteristik uniknya yang sulit ditemukan di daerah lain.</p>
-      
-      <h2>Karakteristik Kopi Gayo</h2>
-      <p>Kopi Gayo memiliki beberapa karakteristik yang membuatnya istimewa:</p>
-      <ul>
-        <li><strong>Body yang kuat dan kental</strong> - Memberikan sensasi tekstur yang kaya di mulut</li>
-        <li><strong>Rasa earthy yang khas</strong> - Ciri khas kopi Sumatra yang ditanam di tanah vulkanik</li>
-        <li><strong>Sentuhan cokelat dan rempah</strong> - Memberikan kompleksitas rasa yang unik</li>
-        <li><strong>After taste yang panjang</strong> - Meninggalkan kesan yang tahan lama</li>
-        <li><strong>Keasaman rendah</strong> - Cocok untuk mereka yang sensitif terhadap asam</li>
-      </ul>
-      
-      <h2>Proses Penanaman dan Pengolahan</h2>
-      <p>Kopi Gayo ditanam di ketinggian 1.200-1.600 mdpl dengan sistem naungan alami dari pohon-pohon besar. Proses pengolahan yang umum digunakan adalah metode full-washed dan semi-washed yang menghasilkan karakter kopi yang bersih dan konsisten.</p>
-      
-      <h2>Nilai Ekonomi dan Ekspor</h2>
-      <p>Kopi Gayo telah menjadi primadona ekspor kopi Indonesia. Pembeli utama berasal dari Amerika Serikat, Eropa, dan Asia Timur. Dengan sistem perdagangan langsung dan sertifikasi fair trade, petani kopi Gayo mendapatkan harga yang lebih baik untuk produk berkualitas mereka.</p>
-      
-      <h2>Tips Menyeduh Kopi Gayo</h2>
-      <p>Untuk mendapatkan pengalaman terbaik menikmati kopi Gayo, kami merekomendasikan:</p>
-      <ul>
-        <li>Giling kasar untuk metode manual brew</li>
-        <li>Suhu air 88-92°C</li>
-        <li>Rasio kopi dan air 1:15-1:17</li>
-        <li>Waktu seduh 3-4 menit</li>
-      </ul>
-    `,
-    excerpt: 'Menjelajahi karakteristik unik kopi Arabika Gayo yang terkenal dengan body kuat dan rasa earthy dengan sentuhan cokelat.',
-    author: 'Tim GGG',
-    authorEmail: 'blog@gggindonesia.com',
-    date: '2024-01-15',
-    image: '/images/blog/gayo-coffee.jpg',
-    category: 'Kopi',
-    readTime: 5
-  }
-};
+/**
+ * Halaman Detail Artikel Publik.
+ * Menggunakan parser Markdown sederhana agar tampilan konten memiliki hierarki visual (H1, H2, Bold, List).
+ */
+export default async function BlogDetailPage({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}) {
+  // Menangani params sebagai Promise sesuai standar Next.js terbaru (v15+)
+  const { slug } = await params;
 
-export default function BlogPostPage() {
-  const params = useParams();
-  const slug = params?.slug as string;
-  const post = blogPosts[slug as keyof typeof blogPosts];
+  const post = await prisma.blogPost.findUnique({
+    where: { slug },
+    include: { author: true }
+  });
 
-  if (!post) {
-    return (
-      <Layout>
-        <section className="pt-32 pb-16 min-h-screen">
-          <Container>
-            <h1 className="text-4xl font-bold text-primary mb-4">Artikel Tidak Ditemukan</h1>
-            <p className="text-xl text-dark/70 mb-8">Maaf, artikel yang Anda cari tidak tersedia.</p>
-            <Link href="/blog">
-              <Button variant="primary">Kembali ke Blog</Button>
-            </Link>
-          </Container>
-        </section>
-      </Layout>
-    );
-  }
+  if (!post) notFound();
+
+  // Fungsi Parser untuk mengubah simbol Markdown menjadi elemen HTML yang rapi
+  const formatArticleContent = (text: string) => {
+    return text
+      // Menangani Judul Utama (H1) - ditandai dengan # 
+      .replace(/^# (.*$)/gim, '<h1 class="text-3xl md:text-4xl font-extrabold mb-6 mt-10 text-gray-900 tracking-tight leading-tight">$1</h1>')
+      // Menangani Sub-Judul (H2) - ditandai dengan ##
+      .replace(/^## (.*$)/gim, '<h2 class="text-2xl md:text-3xl font-bold mb-4 mt-8 text-emerald-800 tracking-tight border-b border-gray-100 pb-3">$1</h2>')
+      // Menangani Daftar/List - ditandai dengan * di awal baris
+      .replace(/^\* (.*$)/gim, '<li class="ml-6 list-disc mb-2 text-gray-700 pl-2">$1</li>')
+      // Menangani Teks Tebal - ditandai dengan **teks**
+      .replace(/\*\*(.*)\*\*/gim, '<strong class="font-bold text-gray-900">$1</strong>')
+      // Menangani Teks Miring - ditandai dengan *teks*
+      .replace(/\*(.*)\*/gim, '<em class="italic text-gray-800">$1</em>')
+      // Menangani Baris Baru
+      .replace(/\n/gim, '<br />');
+  };
 
   return (
-    <Layout>
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-gradient-to-r from-primary to-dark text-white">
-        <Container>
+    <>
+      <Header />
+      <article className="min-h-screen bg-white pt-32 pb-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          
+          {/* Navigasi Kembali ke Blog */}
           <Link 
             href="/blog" 
-            className="inline-flex items-center text-secondary hover:text-white transition-colors mb-6"
+            className="inline-flex items-center text-emerald-600 font-bold mb-10 hover:translate-x-1 transition-transform group"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Kembali ke Blog
+            <ArrowLeft className="w-4 h-4 mr-2" /> Kembali ke Blog
           </Link>
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">
-            {post.title}
-          </h1>
-          <div className="flex flex-wrap items-center gap-6 text-gray-200">
-            <span className="flex items-center">
-              <Calendar className="w-5 h-5 mr-2" />
-              {new Date(post.date).toLocaleDateString('id-ID', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              })}
-            </span>
-            <span className="flex items-center">
-              <User className="w-5 h-5 mr-2" />
-              {post.author}
-            </span>
-            <span className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              {post.readTime} menit baca
-            </span>
-            <span className="bg-secondary px-3 py-1 rounded-full text-sm">
+          
+          <header className="mb-12">
+            <span className="bg-emerald-100 text-emerald-700 px-4 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-6 inline-block">
               {post.category}
             </span>
-          </div>
-        </Container>
-      </section>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.1] mb-8 tracking-tighter">
+              {post.title}
+            </h1>
 
-      {/* Featured Image */}
-      <section className="relative h-96 -mt-16">
-        <Image
-          src={post.image}
-          alt={post.title}
-          fill
-          className="object-cover"
-          priority
-        />
-      </section>
-
-      {/* Content */}
-      <section className="py-20 bg-light">
-        <Container>
-          <div className="max-w-3xl mx-auto">
-            <article 
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-
-            {/* Share & Author */}
-            <div className="mt-12 pt-8 border-t border-gray-300">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-dark/60">Ditulis oleh:</p>
-                  <p className="font-semibold text-primary">{post.author}</p>
-                  <a 
-                    href={`mailto:${post.authorEmail}`}
-                    className="text-secondary text-sm hover:underline"
-                  >
-                    {post.authorEmail}
-                  </a>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <span className="text-dark/60">Bagikan:</span>
-                  <button className="text-primary hover:text-secondary transition-colors">
-                    <Share2 className="w-5 h-5" />
-                  </button>
-                </div>
+            <div className="flex flex-wrap items-center gap-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest pb-8 border-b border-gray-100">
+              <div className="flex items-center">
+                <Calendar className="w-4 h-4 mr-2 text-emerald-600" />
+                {new Date(post.createdAt).toLocaleDateString('id-ID', { 
+                  day: 'numeric', 
+                  month: 'long', 
+                  year: 'numeric' 
+                })}
+              </div>
+              <div className="flex items-center">
+                <User className="w-4 h-4 mr-2 text-emerald-600" />
+                Diterbitkan oleh {post.author.name}
+              </div>
+              <div className="flex items-center">
+                <Clock className="w-4 h-4 mr-2 text-emerald-600" />
+                Insight GGG
               </div>
             </div>
+          </header>
+
+          {/* Gambar Utama Artikel */}
+          {post.image && (
+            <div className="w-full aspect-video mb-16 rounded-[48px] overflow-hidden shadow-2xl border border-gray-100 bg-gray-50">
+              <img 
+                src={post.image} 
+                alt={post.title} 
+                className="w-full h-full object-cover" 
+              />
+            </div>
+          )}
+
+          {/* Area Konten Utama - Render HTML dari Parser Markdown */}
+          <div className="max-w-3xl mx-auto">
+            <div 
+              className="blog-content prose prose-lg prose-emerald max-w-none text-gray-700 leading-relaxed font-sans text-lg"
+              dangerouslySetInnerHTML={{ __html: formatArticleContent(post.content) }}
+            />
           </div>
-        </Container>
-      </section>
-    </Layout>
+
+          {/* Bagian Penutup / Bio Penulis */}
+          <div className="mt-24 p-8 md:p-12 bg-gray-50 rounded-[40px] border border-gray-100 flex flex-col md:flex-row items-center gap-8 shadow-sm">
+            <div className="w-20 h-20 bg-emerald-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-xl shrink-0">
+              {post.author.name.charAt(0)}
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Penulis: {post.author.name}</h4>
+              <p className="text-gray-500 leading-relaxed font-light">
+                Spesialis komoditas ekspor di PT Gatha Gemilang Global. Berfokus pada pengembangan strategi pasar internasional dan manajemen rantai pasok produk unggulan Nusantara.
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+      <Footer />
+    </>
   );
 }

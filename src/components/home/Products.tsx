@@ -1,262 +1,222 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container } from '../ui/Container';
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Coffee, Droplet, Palmtree, Leaf } from 'lucide-react';
-import Image from 'next/image';
+import Link from 'next/link';
+import { Coffee, Droplet, Palmtree, Leaf, CheckCircle2 } from 'lucide-react';
 
 const Products = () => {
   const [activeTab, setActiveTab] = useState('coffee');
 
   const tabs = [
-    { id: 'coffee', name: 'Kopi Premium', icon: Coffee },
-    { id: 'sweeteners', name: 'Pemanis Alami', icon: Droplet },
-    { id: 'coconut', name: 'Produk Kelapa', icon: Palmtree },
-    { id: 'others', name: 'Pinang & Sayuran', icon: Leaf },
+    { id: 'coffee', name: 'Premium Coffee', icon: Coffee },
+    { id: 'sweeteners', name: 'Natural Sweeteners', icon: Droplet },
+    { id: 'coconut', name: 'Coconut Products', icon: Palmtree },
+    { id: 'others', name: 'Betel Nut & Vegetables', icon: Leaf },
   ];
 
   const coffeeProducts = {
     arabica: {
-      title: 'Kopi Arabika Indonesia',
-      description: 'Dihargai karena rasa yang kompleks dan bernuansa, ditanam di dataran tinggi Sumatera, Jawa, Sulawesi, dan Bali.',
+      title: 'Indonesian Arabica',
+      description: 'Prized for its complex and nuanced flavors, Indonesian Arabica is predominantly grown in the high-altitude regions of Sumatra, Java, Sulawesi, and Bali. These coffees are celebrated for their full body, low acidity, and distinctive tasting notes.',
       origins: [
-        {
-          region: 'Gayo',
-          notes: 'Earthy, Chocolate, Citric Notes, Nutty, Herbal, Spicy',
-          body: 'Strong, Robust Body, Medium Acidity'
-        },
-        {
-          region: 'Mandheling',
-          notes: 'Earthy, Spicy, Cocoa, Chocolate, Licorice, Sweet Finish',
-          body: 'Full, Syrupy Body, Low Acidity'
-        },
-        {
-          region: 'Java',
-          notes: 'Rich, Chocolate, Earthy, Molasses, Clove, Fig, Cedar, Cinnamon',
-          body: 'Heavy Body, Low Acidity'
-        },
-        {
-          region: 'Lintong',
-          notes: 'Earthy Cedar, Dark Chocolate, Sweet Tobacco, Herbaceous Spices',
-          body: 'Heavy Body, Low Acidity'
-        }
+        { region: 'Gayo', notes: 'Earthy, Chocolate, Citric Notes, Nutty, Herbal, Spicy', body: 'Strong, Robust Body, Medium Acidity' },
+        { region: 'Mandheling', notes: 'Earthy, Spicy, Cocoa, Chocolate, Licorice, Sweet Finish', body: 'Full, Syrupy Body, Low Acidity' },
+        { region: 'Java', notes: 'Rich, Chocolate, Earthy, Molasses, Clove, Fig, Cedar, Cinnamon', body: 'Heavy Body, Low Acidity' },
+        { region: 'Lintong', notes: 'Earthy Cedar, Dark Chocolate, Sweet Tobacco, Herbaceous Spices', body: 'Heavy Body, Low Acidity' }
       ],
       grades: 'Grade 1 (Specialty), Grade 2, Grade 3',
       processing: 'Full / Semi-Washed',
-      image: '/images/arabica.jpg'
+      image: '/img/Arabica.jpeg' 
     },
     robusta: {
-      title: 'Kopi Robusta Indonesia',
-      description: 'Dikenal karena kekuatan dan karakter yang berani, tumbuh subur di daerah dataran rendah seperti Lampung dan Jawa.',
+      title: 'Indonesian Robusta',
+      description: 'Known for its strength and bold character, thriving in lower-altitude regions like Lampung and Java. Ideal for espresso blends, delivering intense flavors and an excellent crema.',
       origins: [
-        {
-          region: 'Lampung',
-          notes: 'Strong, Earthy, More Bitter, Intense',
-          body: 'Full Body, Low Acidity'
-        },
-        {
-          region: 'Sidikalang',
-          notes: 'Earthy, Spicy, Hot, Fresh',
-          body: 'Full Body'
-        },
-        {
-          region: 'Temanggung',
-          notes: 'Earthy, Caramel, Woody',
-          body: 'Full Body, Low Acidity'
-        }
+        { region: 'Lampung', notes: 'Strong, Earthy, More Bitter, Intense', body: 'Full Body, Low Acidity' },
+        { region: 'Sidikalang', notes: 'Earthy, Spicy, Hot, Fresh', body: 'Full Body' },
+        { region: 'Temanggung', notes: 'Earthy, Caramel, Woody', body: 'Full Body, Low Acidity' }
       ],
       grades: 'Grade 3',
       processing: 'Full / Semi-Washed',
-      image: '/images/robusta.jpg'
+      image: '/img/Robusta.jpeg' 
     }
   };
 
   return (
-    <section id="products" className="py-20 bg-white">
-      <Container>
-        <div className="text-center mb-16">
-          <h2 className="section-title">Produk Premium Kami</h2>
-          <p className="section-subtitle max-w-3xl mx-auto">
-            Menghadirkan produk-produk terbaik Indonesia dengan kualitas ekspor dan standar internasional
+    <section id="products" className="py-24 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-emerald-600 font-bold tracking-wider uppercase text-sm mb-2 block">
+            Our Catalog
+          </span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
+            Our Premium Products
+          </h2>
+          <p className="text-lg text-gray-600">
+            Connecting global markets with the finest products from across the Indonesian archipelago.
           </p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                activeTab === tab.id
-                  ? 'bg-primary text-white shadow-lg transform scale-105'
-                  : 'bg-light text-dark hover:bg-primary/10'
-              }`}
-            >
-              <tab.icon className="w-5 h-5" />
-              <span>{tab.name}</span>
-            </button>
-          ))}
+        <div className="flex justify-center mb-16">
+          <div className="inline-flex flex-wrap justify-center gap-2 p-2 bg-white rounded-2xl shadow-sm border border-gray-100">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                  activeTab === tab.id
+                    ? 'bg-emerald-600 text-white shadow-md transform scale-105'
+                    : 'bg-transparent text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'
+                }`}
+              >
+                <tab.icon className="w-5 h-5" />
+                <span>{tab.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Coffee Products */}
+        {/* --- COFFEE TAB --- */}
         {activeTab === 'coffee' && (
-          <div className="space-y-16">
+          <div className="space-y-24 animate-fade-in">
             {/* Arabica */}
             <div>
-              <h3 className="text-3xl font-display font-bold text-primary mb-8">
-                {coffeeProducts.arabica.title}
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <div>
-                  <p className="text-lg text-dark/80 mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-10 items-center">
+                <div className="order-2 lg:order-1">
+                  <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
+                    {coffeeProducts.arabica.title}
+                  </h3>
+                  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                     {coffeeProducts.arabica.description}
                   </p>
-                  <div className="bg-light p-6 rounded-lg mb-6">
-                    <h4 className="font-semibold text-primary mb-2">Spesifikasi Produk:</h4>
-                    <p className="mb-2"><span className="font-semibold">Grade:</span> {coffeeProducts.arabica.grades}</p>
-                    <p className="mb-2"><span className="font-semibold">Metode Pengolahan:</span> {coffeeProducts.arabica.processing}</p>
-                    <p><span className="font-semibold">Syarat Pembayaran:</span> T/T atau Irrevocable LC At Sight</p>
+                  
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl mb-8">
+                    <h4 className="font-bold text-emerald-900 mb-4 text-lg">Product Specifications</h4>
+                    <ul className="space-y-3">
+                      <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3 mt-0.5 flex-shrink-0"/> <span className="text-gray-700"><strong className="text-gray-900">Grade:</strong> {coffeeProducts.arabica.grades}</span></li>
+                      <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3 mt-0.5 flex-shrink-0"/> <span className="text-gray-700"><strong className="text-gray-900">Processing:</strong> {coffeeProducts.arabica.processing}</span></li>
+                      <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3 mt-0.5 flex-shrink-0"/> <span className="text-gray-700"><strong className="text-gray-900">Payment Terms:</strong> T/T or Irrevocable LC At Sight</span></li>
+                    </ul>
                   </div>
                 </div>
-                <div className="relative h-64 lg:h-auto rounded-lg overflow-hidden">
-                  <Image
-                    src={coffeeProducts.arabica.image}
-                    alt="Kopi Arabika"
-                    fill
-                    className="object-cover"
-                  />
+                <div className="order-1 lg:order-2 relative h-80 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                  <img src={coffeeProducts.arabica.image} alt="Indonesian Arabica" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
               </div>
 
-              <h4 className="text-xl font-semibold text-primary mb-4">Varian Asal Daerah:</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <h4 className="text-xl font-bold text-gray-900 mb-6">Regional Variants</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {coffeeProducts.arabica.origins.map((origin, index) => (
-                  <Card key={index} className="p-6">
-                    <h5 className="text-lg font-semibold text-secondary mb-2">{origin.region}</h5>
-                    <p className="text-sm text-dark/70 mb-2">
-                      <span className="font-semibold">Catatan Rasa:</span> {origin.notes}
+                  <div key={index} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300">
+                    <h5 className="text-xl font-bold text-emerald-700 mb-3">{origin.region}</h5>
+                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                      <strong className="text-gray-900 block mb-1">Tasting Notes:</strong> {origin.notes}
                     </p>
-                    <p className="text-sm text-dark/70">
-                      <span className="font-semibold">Body & Acidity:</span> {origin.body}
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      <strong className="text-gray-900 block mb-1">Body & Acidity:</strong> {origin.body}
                     </p>
-                  </Card>
+                  </div>
                 ))}
               </div>
             </div>
 
+            {/* Divider */}
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+
             {/* Robusta */}
             <div>
-              <h3 className="text-3xl font-display font-bold text-primary mb-8">
-                {coffeeProducts.robusta.title}
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-10 items-center">
+                <div className="relative h-80 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                  <img src={coffeeProducts.robusta.image} alt="Indonesian Robusta" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                </div>
                 <div>
-                  <p className="text-lg text-dark/80 mb-6">
+                  <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
+                    {coffeeProducts.robusta.title}
+                  </h3>
+                  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                     {coffeeProducts.robusta.description}
                   </p>
-                  <div className="bg-light p-6 rounded-lg mb-6">
-                    <h4 className="font-semibold text-primary mb-2">Spesifikasi Produk:</h4>
-                    <p className="mb-2"><span className="font-semibold">Grade:</span> {coffeeProducts.robusta.grades}</p>
-                    <p className="mb-2"><span className="font-semibold">Metode Pengolahan:</span> {coffeeProducts.robusta.processing}</p>
-                    <p><span className="font-semibold">Syarat Pembayaran:</span> T/T atau Irrevocable LC At Sight</p>
+                  
+                  <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl mb-8">
+                    <h4 className="font-bold text-emerald-900 mb-4 text-lg">Product Specifications</h4>
+                    <ul className="space-y-3">
+                      <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3 mt-0.5 flex-shrink-0"/> <span className="text-gray-700"><strong className="text-gray-900">Grade:</strong> {coffeeProducts.robusta.grades}</span></li>
+                      <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3 mt-0.5 flex-shrink-0"/> <span className="text-gray-700"><strong className="text-gray-900">Processing:</strong> {coffeeProducts.robusta.processing}</span></li>
+                      <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-600 mr-3 mt-0.5 flex-shrink-0"/> <span className="text-gray-700"><strong className="text-gray-900">Payment Terms:</strong> T/T or Irrevocable LC At Sight</span></li>
+                    </ul>
                   </div>
-                </div>
-                <div className="relative h-64 lg:h-auto rounded-lg overflow-hidden">
-                  <Image
-                    src={coffeeProducts.robusta.image}
-                    alt="Kopi Robusta"
-                    fill
-                    className="object-cover"
-                  />
                 </div>
               </div>
 
-              <h4 className="text-xl font-semibold text-primary mb-4">Varian Asal Daerah:</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <h4 className="text-xl font-bold text-gray-900 mb-6">Regional Variants</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {coffeeProducts.robusta.origins.map((origin, index) => (
-                  <Card key={index} className="p-6">
-                    <h5 className="text-lg font-semibold text-secondary mb-2">{origin.region}</h5>
-                    <p className="text-sm text-dark/70 mb-2">
-                      <span className="font-semibold">Catatan Rasa:</span> {origin.notes}
+                  <div key={index} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300">
+                    <h5 className="text-xl font-bold text-emerald-700 mb-3">{origin.region}</h5>
+                    <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                      <strong className="text-gray-900 block mb-1">Tasting Notes:</strong> {origin.notes}
                     </p>
-                    <p className="text-sm text-dark/70">
-                      <span className="font-semibold">Body & Acidity:</span> {origin.body}
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      <strong className="text-gray-900 block mb-1">Body & Acidity:</strong> {origin.body}
                     </p>
-                  </Card>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
         )}
 
-        {/* Sweeteners */}
+        {/* --- SWEETENERS TAB --- */}
         {activeTab === 'sweeteners' && (
-          <div className="space-y-12">
+          <div className="space-y-24 animate-fade-in">
             {/* Molasses */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-3xl font-display font-bold text-primary mb-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="order-2 lg:order-1">
+                <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
                   Pure Sugarcane Molasses
                 </h3>
-                <p className="text-lg text-dark/80 mb-6">
-                  Molases tebu murni adalah sirup kental, gelap, kaya nutrisi yang diproduksi 
-                  dengan merebus jus tebu dan menghilangkan kristal gula. 100% alami, mengandung 
-                  kalsium, zat besi, kalium, magnesium, dan mangan dalam jumlah tinggi.
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  Pure sugarcane molasses is a thick, dark, nutrient-rich syrup produced by boiling sugarcane juice and removing sugar crystals. 100% natural, containing high amounts of calcium, iron, potassium, magnesium, and manganese.
                 </p>
-                <div className="bg-light p-6 rounded-lg">
-                  <h4 className="font-semibold text-primary mb-2">Spesifikasi Produk:</h4>
-                  <ul className="space-y-2 text-dark/80">
-                    <li><span className="font-semibold">Bentuk:</span> Liquid</li>
-                    <li><span className="font-semibold">Brix:</span> 80.6%</li>
-                    <li><span className="font-semibold">Total Sugar Invert:</span> 55%</li>
-                    <li><span className="font-semibold">Density:</span> 1.4kg/Ltr</li>
-                    <li><span className="font-semibold">Kemasan:</span> Drum, IBC, Flexibag</li>
-                    <li><span className="font-semibold">Kapasitas Produksi:</span> 10.000 MT per Tahun</li>
-                    <li><span className="font-semibold">Asal:</span> Indonesia</li>
+                <div className="bg-white border border-gray-200 shadow-sm p-8 rounded-2xl">
+                  <h4 className="font-bold text-gray-900 mb-6 text-lg">Technical Specifications</h4>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+                    <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-2"/> <strong className="text-gray-900 mr-2">Form:</strong> Liquid</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-2"/> <strong className="text-gray-900 mr-2">Brix:</strong> 80.6%</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-2"/> <strong className="text-gray-900 mr-2">Invert Sugar:</strong> 55%</li>
+                    <li className="flex items-center"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-2"/> <strong className="text-gray-900 mr-2">Density:</strong> 1.4kg/Ltr</li>
+                    <li className="flex items-center sm:col-span-2"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-2"/> <strong className="text-gray-900 mr-2">Production Capacity:</strong> 10,000 MT / Year</li>
+                    <li className="flex items-center sm:col-span-2"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-2"/> <strong className="text-gray-900 mr-2">Packaging:</strong> Drum, IBC, Flexibag</li>
                   </ul>
                 </div>
               </div>
-              <div className="relative h-96 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/molasses.jpg"
-                  alt="Molases Tebu"
-                  fill
-                  className="object-cover"
-                />
+              <div className="order-1 lg:order-2 relative h-80 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                <img src="/img/Molasses.png" alt="Pure Sugarcane Molasses" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </div>
             </div>
 
             {/* Palm Sugar */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div className="order-2 lg:order-1 relative h-96 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/palm-sugar.jpg"
-                  alt="Gula Aren Premium"
-                  fill
-                  className="object-cover"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="relative h-80 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                <img src="/img/Palm Sugar.jpeg" alt="Premium Palm Sugar" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </div>
-              <div className="order-1 lg:order-2">
-                <h3 className="text-3xl font-display font-bold text-primary mb-4">
+              <div>
+                <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
                   Premium Palm Sugar
                 </h3>
-                <p className="text-lg text-dark/80 mb-6">
-                  Gula aren premium adalah pemanis alami kaya mineral yang berasal dari nira pohon aren, 
-                  diproduksi terutama di Asia Tenggara, khususnya Indonesia. Alternatif yang lebih sehat 
-                  dari gula tebu dengan indeks glikemik lebih rendah, rasa karamel, dan digunakan dalam 
-                  bentuk cair, butiran, atau balok.
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  Premium palm sugar is a mineral-rich natural sweetener derived from the sap of Arenga pinnata trees, produced primarily in Indonesia. A healthier alternative to cane sugar with a lower glycemic index and a distinctive caramel flavor.
                 </p>
-                <div className="bg-light p-6 rounded-lg">
-                  <h4 className="font-semibold text-primary mb-2">Spesifikasi Produk:</h4>
-                  <ul className="space-y-2 text-dark/80">
-                    <li><span className="font-semibold">Bahan Baku:</span> Nira aren</li>
-                    <li><span className="font-semibold">Rasa:</span> Manis dengan sentuhan karamel</li>
-                    <li><span className="font-semibold">Warna:</span> Cokelat Keemasan</li>
-                    <li><span className="font-semibold">Bentuk:</span> Cetakan, bubuk (sesuai permintaan)</li>
-                    <li><span className="font-semibold">Kemasan:</span> Sesuai permintaan</li>
+                <div className="bg-white border border-gray-200 shadow-sm p-8 rounded-2xl">
+                  <h4 className="font-bold text-gray-900 mb-6 text-lg">Technical Specifications</h4>
+                  <ul className="space-y-4 text-gray-600">
+                    <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0"/> <span><strong className="text-gray-900">Raw Material:</strong> 100% Pure Arenga sap</span></li>
+                    <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0"/> <span><strong className="text-gray-900">Characteristics:</strong> Golden brown with sweet caramel notes</span></li>
+                    <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0"/> <span><strong className="text-gray-900">Available Forms:</strong> Molded (Block/Cylinder), Crystal Powder</span></li>
+                    <li className="flex items-start"><CheckCircle2 className="w-5 h-5 text-emerald-500 mr-3 mt-0.5 flex-shrink-0"/> <span><strong className="text-gray-900">Packaging:</strong> Available in various sizes as requested</span></li>
                   </ul>
                 </div>
               </div>
@@ -264,118 +224,122 @@ const Products = () => {
           </div>
         )}
 
-        {/* Coconut Products */}
+        {/* --- COCONUT TAB --- */}
         {activeTab === 'coconut' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <Card className="p-8">
-              <Palmtree className="w-16 h-16 text-secondary mb-4" />
-              <h3 className="text-2xl font-display font-bold text-primary mb-4">
-                Produk Kelapa Premium
-              </h3>
-              <p className="text-dark/80 mb-6">
-                Berasal dari pesisir tropis Indonesia yang subur, produk kelapa kami diproses 
-                dengan standar kebersihan yang ketat untuk mempertahankan kesegaran alami, 
-                minyak, dan nilai gizinya.
-              </p>
-              <div className="space-y-2 text-dark/80">
-                <p><span className="font-semibold">Bentuk:</span> Kopra, Kelapa Utuh</p>
-                <p><span className="font-semibold">Ukuran:</span> Sesuai Permintaan</p>
-                <p><span className="font-semibold">Kemasan:</span> Sesuai Permintaan</p>
+          <div className="animate-fade-in">
+            <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col lg:flex-row">
+              <div className="p-10 lg:p-16 flex flex-col justify-center lg:w-1/2">
+                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-8">
+                  <Palmtree className="w-8 h-8" />
+                </div>
+                <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
+                  Premium Coconut Products
+                </h3>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  Harvested from the lush, tropical coasts of Indonesia, our coconut products are processed with strict hygiene standards to retain their natural freshness, oils, and nutritional value.
+                </p>
+                <div className="space-y-4">
+                  <div className="bg-gray-50 p-4 rounded-xl flex items-center">
+                    <span className="w-1/3 font-bold text-gray-900">Form</span>
+                    <span className="w-2/3 text-gray-600">COPRA, Whole coconut</span>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-xl flex items-center">
+                    <span className="w-1/3 font-bold text-gray-900">Size</span>
+                    <span className="w-2/3 text-gray-600">As Requested</span>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-xl flex items-center">
+                    <span className="w-1/3 font-bold text-gray-900">Packaging</span>
+                    <span className="w-2/3 text-gray-600">As Requested</span>
+                  </div>
+                </div>
               </div>
-            </Card>
-            <div className="relative h-96 rounded-lg overflow-hidden">
-              <Image
-                src="/images/coconut.jpg"
-                alt="Produk Kelapa"
-                fill
-                className="object-cover"
-              />
+              <div className="relative h-80 lg:h-auto lg:w-1/2">
+                <img src="/img/Coconut.jpeg" alt="Premium Coconut Products" className="absolute inset-0 w-full h-full object-cover" />
+              </div>
             </div>
           </div>
         )}
 
-        {/* Betel Nut & Vegetables */}
+        {/* --- OTHERS TAB (BETEL NUT & VEGETABLES) --- */}
         {activeTab === 'others' && (
-          <div className="space-y-12">
+          <div className="space-y-24 animate-fade-in">
             {/* Betel Nut */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl font-display font-bold text-primary mb-4">
-                  Pinang Premium
+                <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
+                  Betel Nut
                 </h3>
-                <p className="text-lg text-dark/80 mb-6">
-                  Kami mengekspor biji pinang kering matahari berkualitas premium. Dipilih 
-                  dan diproses dengan hati-hati, pinang kami memiliki pola internal dan kadar 
-                  air yang sangat baik, melayani beragam permintaan pasar industri dan tradisional 
-                  secara global.
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  We export premium quality, sun-dried Betel Nuts. Carefully selected and processed, our betel nuts feature excellent internal patterns and moisture content, catering to diverse industrial and traditional market demands globally.
                 </p>
-                <div className="bg-light p-6 rounded-lg">
-                  <h4 className="font-semibold text-primary mb-2">Spesifikasi Produk:</h4>
-                  <ul className="space-y-2 text-dark/80">
-                    <li><span className="font-semibold">Asal:</span> Sumatera, Indonesia</li>
-                    <li><span className="font-semibold">Grade:</span> Whole & Split - 80/85, 90/95</li>
-                    <li><span className="font-semibold">Kadar Air:</span> {'<'}5%</li>
-                    <li><span className="font-semibold">Kemasan:</span> Sesuai Permintaan</li>
+                <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-2xl">
+                  <h4 className="font-bold text-emerald-900 mb-4 text-lg">Product Specifications:</h4>
+                  <ul className="space-y-3 text-gray-700">
+                    <li className="flex justify-between border-b border-emerald-200/50 pb-2">
+                      <strong className="text-gray-900">Origin:</strong> <span>Sumatera, Indonesia</span>
+                    </li>
+                    <li className="flex justify-between border-b border-emerald-200/50 pb-2">
+                      <strong className="text-gray-900">Grade:</strong> <span>Whole & Split - 80/85, 90/95</span>
+                    </li>
+                    <li className="flex justify-between border-b border-emerald-200/50 pb-2">
+                      <strong className="text-gray-900">Moisture Content:</strong> <span>{'<'} 5%</span>
+                    </li>
+                    <li className="flex justify-between pb-2">
+                      <strong className="text-gray-900">Packaging:</strong> <span>As Requested</span>
+                    </li>
                   </ul>
                 </div>
               </div>
-              <div className="relative h-96 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/betel-nut.jpg"
-                  alt="Pinang Premium"
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative h-80 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl">
+                <img src="/img/Betel Nut.jpeg" alt="Betel Nut" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </div>
             </div>
 
             {/* Vegetables */}
-            <div>
-              <h3 className="text-3xl font-display font-bold text-primary mb-6">
-                Sayuran Segar
-              </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                  <p className="text-lg text-dark/80 mb-6">
-                    Kami juga menyediakan sayuran segar, renyah, dan cerah yang dibudidayakan 
-                    di tanah vulkanik subur Indonesia. Kami memastikan manajemen rantai pasokan 
-                    yang cepat sehingga produk kami mencapai tujuan Anda dalam kondisi puncak 
-                    kesegaran.
-                  </p>
-                  <div className="bg-light p-6 rounded-lg">
-                    <h4 className="font-semibold text-primary mb-2">Jenis Sayuran:</h4>
-                    <ul className="grid grid-cols-2 gap-2 text-dark/80">
-                      <li>• Kentang</li>
-                      <li>• Ubi Jalar</li>
-                      <li>• Kubis Hijau</li>
-                      <li>• Kubis Putih</li>
-                      <li>• Wortel</li>
-                      <li>• Dan lainnya</li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="relative h-64 rounded-lg overflow-hidden">
-                  <Image
-                    src="/images/vegetables.jpg"
-                    alt="Sayuran Segar"
-                    fill
-                    className="object-cover"
-                  />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="relative h-80 lg:h-full min-h-[400px] rounded-3xl overflow-hidden shadow-xl order-2 lg:order-1">
+                <img src="/img/Vegetables.png" alt="Fresh Vegetables" className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+              </div>
+              <div className="order-1 lg:order-2">
+                <h3 className="text-3xl font-extrabold text-gray-900 mb-6">
+                  Fresh Vegetables
+                </h3>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  We also supply farm-fresh, crisp, and vibrant vegetables cultivated in Indonesia's fertile volcanic soils. We ensure rapid supply chain management so our produce reaches your destination at peak freshness.
+                </p>
+                <div className="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-6 text-lg">Main Commodities:</h4>
+                  <ul className="grid grid-cols-2 gap-4 text-gray-600">
+                    <li className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span> Potatoes</li>
+                    <li className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span> Sweet Potatoes</li>
+                    <li className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span> Green Cabbages</li>
+                    <li className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span> White Cabbages</li>
+                    <li className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span> Carrots</li>
+                    <li className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span> And More...</li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        <div className="text-center mt-12">
-          <p className="text-lg text-secondary font-semibold mb-4">
-            Sampel tersedia berdasarkan permintaan
+        {/* CTA Footer */}
+        <div className="text-center mt-24 pt-16 border-t border-gray-200">
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            Interested in our products?
+          </h3>
+          <p className="text-lg text-gray-600 mb-8">
+            Samples are available upon request to guarantee our quality.
           </p>
-          <Button variant="primary" size="lg">
-            Minta Sampel
-          </Button>
+          <Link 
+            href="#contact" 
+            className="inline-block px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+          >
+            Request a Sample
+          </Link>
         </div>
-      </Container>
+
+      </div>
     </section>
   );
 };
