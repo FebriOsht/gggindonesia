@@ -14,16 +14,19 @@ import {
   Heading1,
   Heading2,
   List,
-  Eye
+  Eye,
+  X
 } from 'lucide-react';
 
 /**
  * FILE: src/components/admin/BlogForm.tsx
- * PERBAIKAN: Menambahkan '| null' pada initialData agar tidak error saat build.
+ * PERBAIKAN: Menambahkan onSubmit dan onCancel ke Props agar kompatibel dengan dashboard.
  */
 
 interface BlogFormProps {
-  action: (formData: FormData) => void;
+  action?: (formData: FormData) => void; // Opsional jika menggunakan onSubmit
+  onSubmit?: (data: any) => void;       // Ditambahkan untuk kompatibilitas dashboard
+  onCancel?: () => void;                 // Ditambahkan untuk aksi batal di dashboard
   initialData?: {
     id: string;
     title: string;
@@ -33,23 +36,25 @@ interface BlogFormProps {
     category: string;
     published: boolean;
     image: string | null;
-  } | null; // Menerima null untuk kompatibilitas state editing
+  } | null;
 }
 
-export default function BlogForm({ action, initialData }: BlogFormProps) {
+export default function BlogForm({ action, onSubmit, onCancel, initialData }: BlogFormProps) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState<'content' | 'preview' | 'seo'>('content');
   
-  // Menggunakan optional chaining (?.) untuk menangani data yang mungkin null atau undefined
   const [title, setTitle] = useState(initialData?.title || '');
   const [slug, setSlug] = useState(initialData?.slug || '');
   const [content, setContent] = useState(initialData?.content || '');
   const [excerpt, setExcerpt] = useState(initialData?.excerpt || '');
+  const [published, setPublished] = useState(initialData?.published ?? false);
+  const [category, setCategory] = useState(initialData?.category || 'Coffee');
   
   const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Fungsi untuk menyisipkan tanda format Markdown
   const insertMarkdown = (prefix: string, suffix: string = '') => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -95,6 +100,28 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
     }
   };
 
+  const handleInternalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    if (onSubmit) {
+      // Jika dipanggil dari dashboard dengan prop onSubmit
+      const data = {
+        title,
+        slug,
+        content,
+        excerpt,
+        category,
+        published,
+        image: imagePreview
+      };
+      onSubmit(data);
+    } else if (action) {
+      // Jika dipanggil dengan prop action (Server Action)
+      startTransition(() => action(formData));
+    }
+  };
+
   const renderPreviewHTML = (text: string) => {
     return text
       .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-extrabold mb-4 mt-6 text-gray-900 border-b pb-2">$1</h1>')
@@ -106,11 +133,7 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
   };
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      startTransition(() => action(formData));
-    }} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <form onSubmit={handleInternalSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <div className="lg:col-span-8 space-y-6">
         <div className="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
@@ -196,7 +219,12 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
           <div className="pt-4 border-t border-gray-100 space-y-5">
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kategori</span>
-              <select name="category" defaultValue={initialData?.category || 'Coffee'} className="font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg outline-none cursor-pointer">
+              <select 
+                name="category" 
+                value={category} 
+                onChange={(e) => setCategory(e.target.value)}
+                className="font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg outline-none cursor-pointer"
+              >
                 <option value="Coffee">Coffee</option>
                 <option value="Sweeteners">Sweeteners</option>
                 <option value="Coconut">Coconut</option>
@@ -206,7 +234,12 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
             
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Visibilitas</span>
-              <select name="published" defaultValue={initialData?.published ? 'true' : 'false'} className="font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg outline-none cursor-pointer">
+              <select 
+                name="published" 
+                value={published ? 'true' : 'false'} 
+                onChange={(e) => setPublished(e.target.value === 'true')}
+                className="font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-lg outline-none cursor-pointer"
+              >
                 <option value="true">Published</option>
                 <option value="false">Draft</option>
               </select>
@@ -232,7 +265,21 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
               <input ref={fileInputRef} name="image" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
             </div>
           </div>
-          <a href="/admin/dashboard/blog" className="block text-center text-sm font-bold text-gray-400 hover:text-red-500 py-2 transition-colors">Batalkan</a>
+          
+          {/* PERBAIKAN: Menggunakan onCancel jika ada, atau fallback ke link dashboard */}
+          {onCancel ? (
+            <button 
+              type="button"
+              onClick={onCancel}
+              className="w-full py-3 flex items-center justify-center text-sm font-bold text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <X className="w-4 h-4 mr-2" /> Batalkan
+            </button>
+          ) : (
+            <a href="/admin/dashboard/blog" className="block text-center text-sm font-bold text-gray-400 hover:text-red-500 py-3 transition-colors">
+              Batalkan
+            </a>
+          )}
         </div>
       </div>
     </form>
