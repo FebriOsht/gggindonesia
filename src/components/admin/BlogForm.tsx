@@ -3,7 +3,6 @@
 import React, { useState, useTransition, useRef } from 'react';
 import { 
   Save, 
-  X, 
   Settings, 
   FileText, 
   Loader2,
@@ -20,7 +19,7 @@ import {
 
 /**
  * FILE: src/components/admin/BlogForm.tsx
- * Fungsinya: Editor artikel dengan Toolbar Markdown dan Fitur Preview.
+ * PERBAIKAN: Menambahkan '| null' pada initialData agar tidak error saat build.
  */
 
 interface BlogFormProps {
@@ -34,13 +33,14 @@ interface BlogFormProps {
     category: string;
     published: boolean;
     image: string | null;
-  };
+  } | null; // Menerima null untuk kompatibilitas state editing
 }
 
 export default function BlogForm({ action, initialData }: BlogFormProps) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState<'content' | 'preview' | 'seo'>('content');
   
+  // Menggunakan optional chaining (?.) untuk menangani data yang mungkin null atau undefined
   const [title, setTitle] = useState(initialData?.title || '');
   const [slug, setSlug] = useState(initialData?.slug || '');
   const [content, setContent] = useState(initialData?.content || '');
@@ -50,7 +50,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Fungsi untuk menyisipkan tanda format Markdown ke dalam textarea
   const insertMarkdown = (prefix: string, suffix: string = '') => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -65,7 +64,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
     const newText = `${before}${prefix}${selectedText}${suffix}${after}`;
     setContent(newText);
     
-    // Fokuskan kembali ke textarea setelah klik tombol toolbar
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + prefix.length, end + prefix.length);
@@ -97,7 +95,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
     }
   };
 
-  // Parser sederhana untuk menampilkan preview di dalam dashboard admin
   const renderPreviewHTML = (text: string) => {
     return text
       .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-extrabold mb-4 mt-6 text-gray-900 border-b pb-2">$1</h1>')
@@ -115,11 +112,8 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
       startTransition(() => action(formData));
     }} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      {/* BAGIAN UTAMA: EDITOR */}
       <div className="lg:col-span-8 space-y-6">
         <div className="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
-          
-          {/* Navigasi Tab */}
           <div className="flex border-b border-gray-100 bg-gray-50/50">
             <button type="button" onClick={() => setActiveTab('content')} className={`flex-1 py-4 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center space-x-2 transition-all ${activeTab === 'content' ? 'text-emerald-600 bg-white border-b-2 border-emerald-600' : 'text-gray-400'}`}>
               <FileText className="w-4 h-4" /> <span>Edit Konten</span>
@@ -133,14 +127,12 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
           </div>
 
           <div className="p-6 md:p-8">
-            {/* TAB: EDIT KONTEN */}
             <div className={activeTab !== 'content' ? 'hidden' : 'space-y-6 animate-in fade-in duration-300'}>
               <div>
                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Judul Artikel</label>
                 <input name="title" type="text" required value={title} onChange={handleTitleChange} className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all text-xl font-bold text-gray-900" placeholder="Contoh: Mengapa Kopi Gayo Begitu Spesial?" />
               </div>
 
-              {/* TOOLBAR FORMATTING */}
               <div className="flex flex-wrap items-center gap-1 p-2 bg-gray-50 rounded-xl border border-gray-200">
                 <button type="button" onClick={() => insertMarkdown('# ', '')} className="p-2 hover:bg-white rounded-lg transition-all text-gray-600 hover:text-emerald-600" title="Judul Utama (H1)"><Heading1 className="w-4 h-4" /></button>
                 <button type="button" onClick={() => insertMarkdown('## ', '')} className="p-2 hover:bg-white rounded-lg transition-all text-gray-600 hover:text-emerald-600" title="Sub Judul (H2)"><Heading2 className="w-4 h-4" /></button>
@@ -148,7 +140,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
                 <button type="button" onClick={() => insertMarkdown('**', '**')} className="p-2 hover:bg-white rounded-lg transition-all text-gray-600 hover:text-emerald-600" title="Tebal (Bold)"><Bold className="w-4 h-4" /></button>
                 <button type="button" onClick={() => insertMarkdown('*', '*')} className="p-2 hover:bg-white rounded-lg transition-all text-gray-600 hover:text-emerald-600" title="Miring (Italic)"><Italic className="w-4 h-4" /></button>
                 <button type="button" onClick={() => insertMarkdown('* ', '')} className="p-2 hover:bg-white rounded-lg transition-all text-gray-600 hover:text-emerald-600" title="Daftar List"><List className="w-4 h-4" /></button>
-                <span className="ml-auto text-[9px] font-bold text-gray-300 mr-2 uppercase tracking-tighter">Markdown Editor</span>
               </div>
 
               <div>
@@ -165,7 +156,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
               </div>
             </div>
 
-            {/* TAB: PREVIEW (Cek Tampilan) */}
             <div className={activeTab !== 'preview' ? 'hidden' : 'animate-in fade-in duration-300'}>
               <div className="prose prose-emerald max-w-none bg-gray-50 p-6 md:p-10 rounded-[32px] border border-gray-100 min-h-[500px]">
                 <h1 className="text-4xl font-extrabold mb-8 text-gray-900 leading-tight">{title || 'Judul Kosong'}</h1>
@@ -176,7 +166,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
               </div>
             </div>
 
-            {/* TAB: SEO & URL */}
             <div className={activeTab !== 'seo' ? 'hidden' : 'space-y-6 animate-in fade-in duration-300'}>
               <div>
                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Slug URL (Alamat Link)</label>
@@ -194,7 +183,6 @@ export default function BlogForm({ action, initialData }: BlogFormProps) {
         </div>
       </div>
 
-      {/* KOLOM KANAN: SIDEBAR */}
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-white rounded-3xl shadow-sm border border-gray-200 p-6 space-y-5 sticky top-24">
           <h3 className="font-bold text-gray-900 flex items-center text-lg">
