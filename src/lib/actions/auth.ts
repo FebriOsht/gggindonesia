@@ -9,7 +9,6 @@ import { revalidatePath } from 'next/cache';
 
 /**
  * Fungsi untuk Login Admin
- * Menangani verifikasi kredensial dan pembuatan session (cookie)
  */
 export async function loginUser(formData: FormData) {
   const email = formData.get('email') as string;
@@ -35,57 +34,62 @@ export async function loginUser(formData: FormData) {
     }
 
     // 3. Buat token JWT
+    // Pastikan JWT_SECRET di Vercel sama dengan yang di lokal
     const token = sign(
       { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET || 'fallback-secret-key',
+      process.env.JWT_SECRET || 'fallback-secret-key-ggg-2026',
       { expiresIn: '1d' }
     );
 
     // 4. Simpan ke Cookie
     const cookieStore = await cookies();
     
-    // Pengaturan cookie yang dioptimalkan untuk Vercel (Production)
+    /**
+     * PERBAIKAN KRITIS UNTUK VERCEL:
+     * 1. 'secure: true' wajib untuk HTTPS Vercel.
+     * 2. 'sameSite: lax' atau 'strict' agar cookie terkirim saat navigasi.
+     * 3. 'path: /' agar bisa diakses di semua folder admin.
+     */
     cookieStore.set('token', token, {
       httpOnly: true,
-      secure: true, // Wajib true di Vercel (HTTPS)
+      secure: true, 
       sameSite: 'lax',
       maxAge: 60 * 60 * 24, // 1 hari
       path: '/',
     });
 
     /**
-     * PENTING: Menggunakan 'layout' sebagai tipe revalidasi akan membersihkan 
-     * semua cache di bawah direktori /admin, termasuk middleware dan state.
-     * Ini menyelesaikan masalah URL berubah tapi konten tetap di halaman login.
+     * Revalidasi menyeluruh:
+     * Kita hapus cache layout admin agar Next.js mengecek ulang cookie 
+     * sebelum memutuskan halaman mana yang akan ditampilkan.
      */
+    revalidatePath('/', 'layout');
     revalidatePath('/admin', 'layout');
     revalidatePath('/admin/dashboard/blog');
 
-  } catch (error) {
-    // Pastikan redirect tidak tertangkap sebagai error oleh blok catch
-    if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+  } catch (error: any) {
+    // Jangan tangkap error redirect
+    if (error?.message?.includes('NEXT_REDIRECT')) {
       throw error;
     }
     console.error('Login error:', error);
     return { success: false, message: 'Terjadi kesalahan pada server.' };
   }
 
-  // Redirect akhir ke dashboard
+  // Redirect akhir
   redirect('/admin/dashboard/blog');
 }
 
 /**
  * Fungsi untuk Logout
- * Membersihkan sesi dan memaksa refresh cache agar tidak bisa di-"Back"
  */
 export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete('token');
   
-  // Bersihkan semua cache admin saat keluar
+  // Bersihkan semua cache agar tidak bisa di-"Back"
+  revalidatePath('/', 'layout');
   revalidatePath('/admin', 'layout');
-  revalidatePath('/admin/dashboard/blog');
-  revalidatePath('/admin/login');
   
   redirect('/admin/login');
 }
