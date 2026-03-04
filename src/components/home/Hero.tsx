@@ -14,7 +14,7 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 text-center max-w-5xl px-4 md:px-8 mt-16">
         <span className="text-emerald-400 font-semibold tracking-widest uppercase text-sm md:text-base mb-4 block drop-shadow-md">
-          PT.Gatha Gemilang Global
+          PT. Gatha Gemilang Global
         </span>
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight drop-shadow-xl">
           Connecting Global Markets with <br className="hidden md:block" /> 

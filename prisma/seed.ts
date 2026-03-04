@@ -1,28 +1,38 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding...");
+  // Masukkan email domain asli dan password kuat Anda di sini
+  const adminEmail = 'admin@gggindonesia.com';
+  const securePassword = 'Admingatha@123'; // Ganti dengan password pilihan Anda
 
-  const adminPassword = "admin123";
-  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+  const hashedPassword = await bcrypt.hash(securePassword, 10);
 
-  await prisma.user.upsert({
-    where: { email: "admin@gggindonesia.com" },
-    update: { password: hashedPassword },
-    create: {
-      email: "admin@gggindonesia.com",
-      name: "Admin Utama GGG",
+  // Menggunakan upsert agar jika user sudah ada, hanya diupdate (tidak membuat double)
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
       password: hashedPassword,
-      role: "ADMIN",
+    },
+    create: {
+      email: adminEmail,
+      name: 'Admin GGG Indonesia',
+      password: hashedPassword,
+      role: 'ADMIN',
     },
   });
 
-  console.log("Admin ready.");
+  console.log({ admin });
+  console.log('Admin account updated/created successfully.');
 }
 
 main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

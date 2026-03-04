@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com', // Izinkan Cloudinary
+      },
     ],
     unoptimized: process.env.NODE_ENV === 'development'
   }

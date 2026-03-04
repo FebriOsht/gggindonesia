@@ -3,12 +3,35 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Konfigurasi Cloudinary menggunakan environment variables
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+/**
+ * Fungsi bantuan untuk mengunggah file ke Cloudinary
+ */
+async function uploadToCloudinary(file: File): Promise<string> {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  
+  // Ubah buffer ke format base64 string agar bisa dikirim via API
+  const base64Image = `data:${file.type};base64,${buffer.toString('base64')}`;
+
+  // Upload ke Cloudinary
+  const result = await cloudinary.uploader.upload(base64Image, {
+    folder: 'ggg_indonesia_blog', // Gambar akan dikelompokkan di folder ini di Cloudinary
+  });
+
+  return result.secure_url; // Mengembalikan URL HTTPS yang aman
+}
 
 /**
  * Server Action untuk membuat postingan blog baru.
- * Menangani pengunggahan file gambar fisik ke folder public/uploads.
  */
 export async function createBlogPost(formData: FormData) {
   const title = formData.get('title') as string;
@@ -18,30 +41,20 @@ export async function createBlogPost(formData: FormData) {
   const content = formData.get('content') as string;
   const published = formData.get('published') === 'true';
   
-  // Validasi dasar
   if (!title || !content || !slug) {
     throw new Error("Judul, Konten, dan Slug wajib diisi.");
   }
 
-  // 1. PENANGANAN GAMBAR LOKAL
+  // 1. PENANGANAN GAMBAR KE CLOUDINARY
   const imageFile = formData.get('image') as File;
   let imageUrl = '';
 
   if (imageFile && imageFile.size > 0) {
     try {
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      const uploadDir = join(process.cwd(), 'public', 'uploads');
-      await mkdir(uploadDir, { recursive: true });
-
-      const filename = `${Date.now()}-${imageFile.name.replace(/\s+/g, '_')}`;
-      const path = join(uploadDir, filename);
-
-      await writeFile(path, buffer);
-      imageUrl = `/uploads/${filename}`;
+      imageUrl = await uploadToCloudinary(imageFile);
     } catch (error) {
-      console.error("Gagal simpan gambar:", error);
+      console.error("Gagal simpan gambar ke Cloudinary:", error);
+      throw new Error("Gagal mengunggah gambar. Pastikan konfigurasi Cloudinary benar.");
     }
   }
 
@@ -51,7 +64,7 @@ export async function createBlogPost(formData: FormData) {
     throw new Error("Gagal: Akun Admin tidak ditemukan. Pastikan sudah menjalankan seeding database.");
   }
 
-  // 3. SIMPAN KE DATABASE
+  // 3. SIMPAN KE DATABASE NEON
   try {
     await prisma.blogPost.create({
       data: {
@@ -60,7 +73,7 @@ export async function createBlogPost(formData: FormData) {
         category,
         excerpt,
         content,
-        image: imageUrl,
+        image: imageUrl, // Menyimpan URL Cloudinary
         published,
         authorId: author.id,
       },
@@ -102,18 +115,12 @@ export async function updateBlogPost(id: string, formData: FormData) {
 
   let imageUrl = oldPost.image || '';
 
+  // Jika ada file gambar baru yang diunggah, timpa dengan URL Cloudinary baru
   if (imageFile && imageFile.size > 0) {
     try {
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const uploadDir = join(process.cwd(), 'public', 'uploads');
-      await mkdir(uploadDir, { recursive: true });
-      const filename = `${Date.now()}-${imageFile.name.replace(/\s+/g, '_')}`;
-      const path = join(uploadDir, filename);
-      await writeFile(path, buffer);
-      imageUrl = `/uploads/${filename}`;
+      imageUrl = await uploadToCloudinary(imageFile);
     } catch (error) {
-      console.error("Gagal update gambar:", error);
+      console.error("Gagal update gambar ke Cloudinary:", error);
     }
   }
 
