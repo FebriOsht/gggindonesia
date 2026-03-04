@@ -9,6 +9,7 @@ import { revalidatePath } from 'next/cache';
 
 /**
  * Fungsi untuk Login Admin
+ * Menangani verifikasi kredensial dan pembuatan session (cookie)
  */
 export async function loginUser(formData: FormData) {
   const email = formData.get('email') as string;
@@ -42,20 +43,26 @@ export async function loginUser(formData: FormData) {
 
     // 4. Simpan ke Cookie
     const cookieStore = await cookies();
+    
+    // Pengaturan cookie yang dioptimalkan untuk Vercel (Production)
     cookieStore.set('token', token, {
       httpOnly: true,
-      secure: true, // Selalu true untuk produksi (Vercel)
+      secure: true, // Wajib true di Vercel (HTTPS)
       sameSite: 'lax',
       maxAge: 60 * 60 * 24, // 1 hari
       path: '/',
     });
 
-    // PENTING: Bersihkan cache dashboard sebelum pindah halaman
-    // Ini memastikan server mengecek ulang cookie yang baru saja dibuat
+    /**
+     * PENTING: Menggunakan 'layout' sebagai tipe revalidasi akan membersihkan 
+     * semua cache di bawah direktori /admin, termasuk middleware dan state.
+     * Ini menyelesaikan masalah URL berubah tapi konten tetap di halaman login.
+     */
+    revalidatePath('/admin', 'layout');
     revalidatePath('/admin/dashboard/blog');
 
   } catch (error) {
-    // Jika error adalah redirect, lemparkan kembali agar ditangani Next.js
+    // Pastikan redirect tidak tertangkap sebagai error oleh blok catch
     if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
       throw error;
     }
@@ -63,18 +70,20 @@ export async function loginUser(formData: FormData) {
     return { success: false, message: 'Terjadi kesalahan pada server.' };
   }
 
-  // Redirect dilakukan di sini
+  // Redirect akhir ke dashboard
   redirect('/admin/dashboard/blog');
 }
 
 /**
  * Fungsi untuk Logout
+ * Membersihkan sesi dan memaksa refresh cache agar tidak bisa di-"Back"
  */
 export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete('token');
   
-  // Bersihkan cache agar tidak bisa di-back
+  // Bersihkan semua cache admin saat keluar
+  revalidatePath('/admin', 'layout');
   revalidatePath('/admin/dashboard/blog');
   revalidatePath('/admin/login');
   
