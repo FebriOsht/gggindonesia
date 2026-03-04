@@ -5,77 +5,78 @@ import bcrypt from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Fungsi untuk Login Admin
- * Menangani verifikasi kredensial dan pembuatan session (cookie)
  */
 export async function loginUser(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  // 1. Validasi input kosong
   if (!email || !password) {
     return { success: false, message: 'Email dan password wajib diisi.' };
   }
 
   try {
-    // 2. Cari user di database berdasarkan email
-    const user = await prisma.user.findUnique({ 
-      where: { email } 
-    });
+    // 1. Cari user di database
+    const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
       return { success: false, message: 'Email atau password salah.' };
     }
 
-    // 3. Verifikasi password menggunakan bcrypt
+    // 2. Verifikasi password dengan bcrypt
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return { success: false, message: 'Email atau password salah.' };
     }
 
-    // 4. Buat token keamanan (JWT)
+    // 3. Buat token JWT
     const token = sign(
-      { 
-        userId: user.id, 
-        email: user.email, 
-        role: user.role 
-      },
+      { userId: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET || 'fallback-secret-key',
-      { expiresIn: '1d' } // Token berlaku selama 1 hari
+      { expiresIn: '1d' }
     );
 
-    // 5. Simpan token ke dalam Cookie browser (Session)
+    // 4. Simpan ke Cookie
     const cookieStore = await cookies();
     cookieStore.set('token', token, {
-      httpOnly: true, // Tidak bisa diakses oleh JavaScript client (aman)
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      secure: true, // Selalu true untuk produksi (Vercel)
       sameSite: 'lax',
       maxAge: 60 * 60 * 24, // 1 hari
       path: '/',
     });
 
+    // PENTING: Bersihkan cache dashboard sebelum pindah halaman
+    // Ini memastikan server mengecek ulang cookie yang baru saja dibuat
+    revalidatePath('/admin/dashboard/blog');
+
   } catch (error) {
+    // Jika error adalah redirect, lemparkan kembali agar ditangani Next.js
+    if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+      throw error;
+    }
     console.error('Login error:', error);
-    return { success: false, message: 'Terjadi kesalahan sistem. Silakan coba lagi.' };
+    return { success: false, message: 'Terjadi kesalahan pada server.' };
   }
 
-  // Jika berhasil, arahkan ke dashboard blog
+  // Redirect dilakukan di sini
   redirect('/admin/dashboard/blog');
 }
 
 /**
  * Fungsi untuk Logout
- * Menghapus sesi dan mengarahkan kembali ke halaman utama (/)
  */
 export async function logout() {
   const cookieStore = await cookies();
-  
-  // Hapus cookie 'token'
   cookieStore.delete('token');
   
-  // Sesuai permintaan: kembali ke halaman utama setelah logout
-  redirect('/');
+  // Bersihkan cache agar tidak bisa di-back
+  revalidatePath('/admin/dashboard/blog');
+  revalidatePath('/admin/login');
+  
+  redirect('/admin/login');
 }
