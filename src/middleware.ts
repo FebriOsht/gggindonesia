@@ -1,32 +1,48 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { decrypt } from '@/lib/auth';
 
-// Middleware ini bertugas sebagai "Satpam" yang berjalan di Edge Server
-// untuk mengecek cookie sebelum halaman admin sempat dimuat.
+/**
+ * Middleware ini berfungsi sebagai filter keamanan di sisi Edge (Vercel).
+ * Kita akan menyelaraskan nama cookie dengan yang ada di auth.ts (yaitu 'token').
+ */
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
+  
+  // Tentukan rute mana yang harus dilindungi
   const isProtectedRoute = path.startsWith('/admin/dashboard');
   const isLoginRoute = path === '/admin/login';
 
-  // Ambil cookie sesi
-  const cookie = request.cookies.get('session')?.value;
-  const session = cookie ? await decrypt(cookie) : null;
+  // AMBIL COOKIE DENGAN NAMA 'token' (Sesuai dengan auth.ts)
+  const token = request.cookies.get('token')?.value;
 
-  // Jika mencoba masuk ke dashboard tanpa login (atau sesi habis)
-  if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL('/admin/login', request.url));
+  // 1. Jika mencoba akses dashboard tapi tidak ada token
+  if (isProtectedRoute && !token) {
+    // Arahkan paksa ke halaman login
+    const loginUrl = new URL('/admin/login', request.url);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // Jika sudah login tapi mencoba kembali ke halaman login, arahkan ke dashboard
-  if (isLoginRoute && session) {
-    return NextResponse.redirect(new URL('/admin/dashboard/blog', request.url));
+  // 2. Jika sudah ada token tapi mencoba buka halaman login lagi
+  if (isLoginRoute && token) {
+    // Arahkan langsung ke dashboard agar tidak login dua kali
+    const dashboardUrl = new URL('/admin/dashboard/blog', request.url);
+    return NextResponse.redirect(dashboardUrl);
   }
 
+  // 3. Izinkan akses jika kondisi di atas tidak terpenuhi
   return NextResponse.next();
 }
 
-// Hanya jalankan middleware ini pada rute admin
+/**
+ * Konfigurasi rute mana saja yang akan diawasi oleh Middleware ini
+ */
 export const config = {
-  matcher: ['/admin/dashboard/:path*', '/admin/login'],
+  matcher: [
+    /*
+     * Jalankan middleware pada semua rute di bawah /admin/dashboard
+     * dan juga pada halaman /admin/login itu sendiri.
+     */
+    '/admin/dashboard/:path*', 
+    '/admin/login'
+  ],
 };
