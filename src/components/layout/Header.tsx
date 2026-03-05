@@ -17,19 +17,19 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: 'Beranda', href: '/' },
+    { name: 'Home', href: '/' },
     { 
-      name: 'Produk', 
+      name: 'Products', 
       href: '#products',
       dropdown: [
-        { name: 'Kopi Premium', href: '#products' },
-        { name: 'Kelapa & Turunan', href: '#products' },
-        { name: 'Pinang & Sayuran', href: '#products' }
+        { name: 'Premium Coffee', href: '#products' },
+        { name: 'Coconut Products', href: '#products' },
+        { name: 'Betel Nut & Vegetables', href: '#products' }
       ]
     },
-    { name: 'Tentang Kami', href: '#about' },
-    { name: 'Keunggulan', href: '#why-us' },
-    { name: 'Blog', href: '/blog' }, // Menambahkan menu Blog di sini
+    { name: 'About Us', href: '#about' },
+    { name: 'Why Us', href: '#why-us' },
+    { name: 'Blog', href: '/blog' },
   ];
 
   // Dynamic classes based on scroll state
@@ -98,7 +98,7 @@ const Header = () => {
                   : 'bg-white/10 text-white border border-white/30 hover:bg-white hover:text-emerald-900'
               }`}
             >
-              Hubungi Kami
+              Contact Us
             </Link>
           </div>
 
@@ -153,7 +153,7 @@ const Header = () => {
                 className="w-full flex justify-center px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors"
                 onClick={() => setIsOpen(false)}
               >
-                Hubungi Kami
+                Contact Us
               </Link>
             </div>
           </div>

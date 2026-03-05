@@ -8,8 +8,7 @@ import {
   Linkedin, 
   Instagram, 
   Globe, 
-  ArrowRight,
-  ShieldCheck
+  ArrowRight
 } from 'lucide-react';
 
 export default function Footer() {
@@ -28,16 +27,7 @@ export default function Footer() {
             <p className="text-sm leading-relaxed text-gray-500">
               A premier export trading company from Indonesia, connecting global markets with the finest products from across the archipelago. We are your dependable and effective sourcing partner.
             </p>
-            <div className="space-y-3">
-              <div className="flex items-center text-[10px] uppercase tracking-tighter text-gray-600 bg-white/5 p-2 rounded-lg border border-white/5">
-                <ShieldCheck className="w-3 h-3 mr-2 text-emerald-500" />
-                <span>NIB: 0611250135091</span>
-              </div>
-              <div className="flex items-center text-[10px] uppercase tracking-tighter text-gray-600 bg-white/5 p-2 rounded-lg border border-white/5">
-                <ShieldCheck className="w-3 h-3 mr-2 text-emerald-500" />
-                <span>SK: AHU-061665.AH.01.30.Tahun 2025</span>
-              </div>
-            </div>
+            {/* Bagian NIB dan SK Kemenkumham telah dihapus sesuai permintaan */}
           </div>
 
           {/* Kolom 2: Produk Unggulan */}
@@ -124,7 +114,7 @@ export default function Footer() {
                 <a href="https://linkedin.com/in/gathagemilangglobal" target="_blank" className="p-2 bg-white/5 hover:bg-emerald-600 hover:text-white rounded-lg transition-all">
                   <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="#" className="p-2 bg-white/5 hover:bg-emerald-600 hover:text-white rounded-lg transition-all">
+                <a href="https://instagram.com/gathagemilangglobal" target="_blank" className="p-2 bg-white/5 hover:bg-emerald-600 hover:text-white rounded-lg transition-all">
                   <Instagram className="w-5 h-5" />
                 </a>
                 <div className="flex items-center px-3 py-1 bg-white/5 rounded-full text-[10px] font-bold uppercase text-gray-500">
@@ -137,15 +127,11 @@ export default function Footer() {
         </div>
 
         {/* Garis Bawah & Hak Cipta */}
-        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-xs font-medium text-gray-600 flex items-center">
+        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-center items-center gap-6">
+          <div className="text-xs font-medium text-gray-600 flex items-center text-center">
             <span>© {currentYear} PT Gatha Gemilang Global. All Rights Reserved.</span>
           </div>
-          <div className="flex items-center space-x-8 text-[10px] font-bold uppercase tracking-widest text-gray-700">
-            <span className="bg-emerald-950/50 text-emerald-600 px-3 py-1 rounded-full border border-emerald-900/30">
-              NPWP: 1000 0000 0641 8583
-            </span>
-          </div>
+          {/* Bagian NPWP telah dihapus sesuai permintaan */}
         </div>
       </div>
     </footer>
