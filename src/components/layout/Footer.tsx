@@ -19,7 +19,6 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
-          {/* Kolom 1: Profil Perusahaan */}
           <div className="space-y-6">
             <Link href="/" className="inline-block">
               <img src="/img/gggindonesia.png" alt="GGG Logo" className="h-14 w-auto brightness-125" />
@@ -27,10 +26,8 @@ export default function Footer() {
             <p className="text-sm leading-relaxed text-gray-500">
               A premier export trading company from Indonesia, connecting global markets with the finest products from across the archipelago. We are your dependable and effective sourcing partner.
             </p>
-            {/* Bagian NIB dan SK Kemenkumham telah dihapus sesuai permintaan */}
           </div>
 
-          {/* Kolom 2: Produk Unggulan */}
           <div>
             <h4 className="text-white font-bold mb-8 flex items-center">
               Our Commodities
@@ -38,31 +35,31 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4 text-sm font-medium">
               <li>
-                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                <Link href="/#arabica" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
                   Indonesian Arabica & Robusta
                 </Link>
               </li>
               <li>
-                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                <Link href="/#molasses" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
                   Natural Sugarcane Molasses
                 </Link>
               </li>
               <li>
-                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                <Link href="/#palm-sugar" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
                   Premium Palm Sugar
                 </Link>
               </li>
               <li>
-                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                <Link href="/#coconut" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
                   Coconut & Derivatives
                 </Link>
               </li>
               <li>
-                <Link href="/#products" className="hover:text-emerald-400 transition-colors flex items-center group">
+                <Link href="/#betel-nut" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
                   Betel Nut & Vegetables
                 </Link>
@@ -70,7 +67,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Kolom 3: Navigasi Cepat */}
           <div>
             <h4 className="text-white font-bold mb-8 flex items-center">
               Quick Links
@@ -85,7 +81,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Kolom 4: Hubungi Kami */}
           <div>
             <h4 className="text-white font-bold mb-8 flex items-center">
               Office Location
@@ -109,7 +104,6 @@ export default function Footer() {
                 <a href="mailto:Hendra.GGG.ID@gmail.com" className="hover:text-white transition-colors">Hendra.GGG.ID@gmail.com</a>
               </div>
               
-              {/* Social Media */}
               <div className="flex items-center space-x-4 pt-4">
                 <a href="https://linkedin.com/in/gathagemilangglobal" target="_blank" className="p-2 bg-white/5 hover:bg-emerald-600 hover:text-white rounded-lg transition-all">
                   <Linkedin className="w-5 h-5" />
@@ -126,12 +120,10 @@ export default function Footer() {
 
         </div>
 
-        {/* Garis Bawah & Hak Cipta */}
         <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-center items-center gap-6">
           <div className="text-xs font-medium text-gray-600 flex items-center text-center">
             <span>© {currentYear} PT Gatha Gemilang Global. All Rights Reserved.</span>
           </div>
-          {/* Bagian NPWP telah dihapus sesuai permintaan */}
         </div>
       </div>
     </footer>

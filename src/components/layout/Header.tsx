@@ -1,8 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Menu, X, ChevronDown } from 'lucide-react';
+
+// --- PENTING UNTUK PROJECT ASLI ---
+// Di project Next.js Anda, HAPUS blok di bawah ini dan gunakan:
+// import Link from 'next/link';
+const Link = ({ href, children, className, onClick, scroll }: any) => (
+  <a href={href} className={className} onClick={onClick}>{children}</a>
+);
+// ----------------------------------
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,9 +29,10 @@ const Header = () => {
       name: 'Products', 
       href: '#products',
       dropdown: [
-        { name: 'Premium Coffee', href: '#products' },
-        { name: 'Coconut Products', href: '#products' },
-        { name: 'Betel Nut & Vegetables', href: '#products' }
+        { name: 'Premium Coffee', href: '/#arabica' },
+        { name: 'Natural Sweeteners', href: '/#molasses' },
+        { name: 'Coconut Products', href: '/#coconut' },
+        { name: 'Betel Nut & Vegetables', href: '/#betel-nut' }
       ]
     },
     { name: 'About Us', href: '#about' },
@@ -32,7 +40,6 @@ const Header = () => {
     { name: 'Blog', href: '/blog' },
   ];
 
-  // Dynamic classes based on scroll state
   const textColor = scrolled ? 'text-gray-700 hover:text-emerald-600' : 'text-gray-100 hover:text-white';
 
   return (
@@ -44,7 +51,6 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           
-          {/* Logo */}
           <Link href="/" className="flex items-center group">
             <img 
               src="/img/gggindonesia.png" 
@@ -53,7 +59,6 @@ const Header = () => {
             />
           </Link>
 
-          {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <div key={item.name} className="relative group">
@@ -63,13 +68,13 @@ const Header = () => {
                       <span>{item.name}</span>
                       <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:-rotate-180" />
                     </button>
-                    {/* Dropdown Menu Desktop */}
                     <div className="absolute top-full left-0 mt-4 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:mt-2 transition-all duration-300 overflow-hidden">
                       <div className="py-2">
                         {item.dropdown.map((dropItem) => (
                           <Link
                             key={dropItem.name}
                             href={dropItem.href}
+                            scroll={false}
                             className="block px-6 py-3 text-sm text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors font-medium"
                           >
                             {dropItem.name}
@@ -89,7 +94,6 @@ const Header = () => {
               </div>
             ))}
             
-            {/* CTA Button Desktop */}
             <Link 
               href="#contact"
               className={`px-6 py-2.5 rounded-full font-semibold transition-all duration-300 ${
@@ -102,7 +106,6 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className={`lg:hidden p-2 rounded-lg transition-colors ${
               scrolled ? 'text-gray-900 hover:bg-gray-100' : 'text-white hover:bg-white/10'
@@ -113,7 +116,6 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Menu Dropdown */}
         <div className={`lg:hidden absolute top-full left-4 right-4 mt-2 transition-all duration-300 origin-top ${
           isOpen ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-95 invisible'
         }`}>
@@ -128,6 +130,7 @@ const Header = () => {
                         <Link
                           key={dropItem.name}
                           href={dropItem.href}
+                          scroll={false}
                           className="text-gray-600 hover:text-emerald-600 font-medium"
                           onClick={() => setIsOpen(false)}
                         >
