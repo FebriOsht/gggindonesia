@@ -37,25 +37,19 @@ export default function Footer() {
               <li>
                 <Link href="/#arabica" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
-                  Indonesian Arabica & Robusta
+                  Premium Coffee
                 </Link>
               </li>
               <li>
                 <Link href="/#molasses" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
-                  Natural Sugarcane Molasses
-                </Link>
-              </li>
-              <li>
-                <Link href="/#palm-sugar" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
-                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
-                  Premium Palm Sugar
+                  Natural Sweeteners
                 </Link>
               </li>
               <li>
                 <Link href="/#coconut" scroll={false} className="hover:text-emerald-400 transition-colors flex items-center group">
                   <ArrowRight className="w-3 h-3 mr-2 opacity-0 group-hover:opacity-100 -ml-5 group-hover:ml-0 transition-all" />
-                  Coconut & Derivatives
+                  Coconut Products
                 </Link>
               </li>
               <li>

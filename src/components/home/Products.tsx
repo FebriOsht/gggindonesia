@@ -87,11 +87,11 @@ const ProductsContent = () => {
   }, []);
 
   const tabs = [
-    { id: 'premiumcoffee', name: 'Premium Coffee', icon: Coffee },
-    { id: '#naturalsweeteners', name: 'Natural Sweeteners', icon: Droplet },
-    { id: 'coconut', name: 'Coconut Products', icon: Palmtree },
-    { id: 'others', name: 'Betel Nut & Vegetables', icon: Leaf },
-  ];
+  { id: 'coffee', name: 'Premium Coffee', icon: Coffee },
+  { id: 'sweeteners', name: 'Natural Sweeteners', icon: Droplet },
+  { id: 'coconut', name: 'Coconut Products', icon: Palmtree },
+  { id: 'others', name: 'Betel Nut & Vegetables', icon: Leaf },
+];
 
   const coffeeProducts = {
     arabica: {
@@ -141,12 +141,12 @@ const ProductsContent = () => {
               key={tab.id}
               type="button"
               onClick={() => {
-                setActiveTab(tab.id);
-                // Menghapus hash dari URL ketika tab diklik manual agar lebih rapi
-                if (window.history.pushState) {
-                  window.history.pushState('', '/', window.location.pathname);
-                }
-              }}
+  setActiveTab(tab.id);
+
+  if (window.history.pushState) {
+    window.history.pushState(null, '', window.location.pathname);
+  }
+}}
               className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
                 activeTab === tab.id
                   ? 'bg-emerald-600 text-white shadow-md transform scale-105'
