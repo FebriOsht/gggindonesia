@@ -67,7 +67,7 @@ export default function Contact() {
                   <span className="text-2xl mr-4">✉️</span>
                   <div>
                     <h4 className="font-semibold text-lg">Email</h4>
-                    <p className="text-emerald-100 mt-1">Hendra.GGG.ID@gmail.com</p>
+                    <p className="text-emerald-100 mt-1">admin@gggindonesia.com</p>
                   </div>
                 </div>
               </div>
