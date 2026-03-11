@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
+import FloatingSocials from '@/components/ui/FloatingSocials';
 
 export const metadata: Metadata = {
   title: 'PT Gatha Gemilang Global - Eksportir Produk Premium Indonesia',
@@ -28,6 +29,8 @@ export default function RootLayout({
     <html lang="id">
       <body>
         {children}
+        {/* Render Floating Shortcuts di semua halaman publik */}
+        <FloatingSocials />
       </body>
     </html>
   );
