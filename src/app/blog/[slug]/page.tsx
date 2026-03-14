@@ -110,9 +110,9 @@ export default async function BlogDetailPage({
               {post.author.name.charAt(0)}
             </div>
             <div className="flex-1 text-center md:text-left">
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Penulis: {post.author.name}</h4>
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">Author: {post.author.name}</h4>
               <p className="text-gray-500 leading-relaxed font-light">
-                Spesialis komoditas ekspor di PT Gatha Gemilang Global. Berfokus pada pengembangan strategi pasar internasional dan manajemen rantai pasok produk unggulan Nusantara.
+                Export commodity specialist at PT Gatha Gemilang Global. Focuses on developing international market strategies and supply chain management of superior Indonesian products.
               </p>
             </div>
           </div>

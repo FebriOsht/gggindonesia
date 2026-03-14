@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     apple: '/img/ggglogo.png', // Opsional: Untuk ikon di perangkat Apple
   },
   openGraph: {
-    title: 'PT Gatha Gemilang Global - Eksportir Produk Premium Indonesia',
+    title: 'PT Gatha Gemilang Global - Exporter of Premium Indonesian Products',
     description: 'Menghadirkan produk-produk terbaik Indonesia ke pasar global dengan kualitas dan standar internasional.',
     type: 'website',
     locale: 'id_ID',
